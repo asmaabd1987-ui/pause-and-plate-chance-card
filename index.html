@@ -85,7 +85,11 @@ function weightedPick(){let x=Math.random()*100,s=0;for(const p of prizes){s+=p.
 function makeCode(){const c="ABCDEFGHJKLMNPQRSTUVWXYZ23456789";let s="PP-";for(let i=0;i<8;i++)s+=c[Math.floor(Math.random()*c.length)];return s}
 draw();
 document.getElementById("spin").onclick=async()=>{
-if(spinning)return;spinning=true;document.getElementById("spin").disabled=true;
+if(spinning)return;const cardId=new URLSearchParams(window.location.search).get("card");
+if(!cardId){
+alert("المرجو استعمال رابط بطاقة صالح.");
+return;
+  }
 const winner=weightedPick(),idx=prizes.indexOf(winner),target=(idx+.5)*visualArc;
 const finalRotation=angle+Math.PI*2*(5+Math.floor(Math.random()*3))+(Math.PI*2-target),start=angle,duration=4500,t0=performance.now();
 function anim(t){const k=Math.min(1,(t-t0)/duration),ease=1-Math.pow(1-k,4);angle=start+(finalRotation-start)*ease;draw();
