@@ -26,131 +26,66 @@ button:disabled{opacity:.55;cursor:not-allowed}
 .note{text-align:center;font-size:12px;color:#69736a;margin-top:14px;line-height:1.7}
 </style>
 </head>
+
 <body>
 <div class="wrap">
 <div class="card">
+
 <div class="brand">PAUSE <span>&amp;</span> PLATE</div>
+
 <h1>🎁 بطاقة الحظ | CHANCE CARD</h1>
+
 <div class="sub">
 دُر العجلة واكتشف جائزتك!<br>
 <span dir="ltr">Tournez la roue et découvrez votre récompense !</span>
 </div>
+
 <div class="wheelbox">
 <div class="pointer"></div>
 <canvas id="wheel" width="700" height="700"></canvas>
 </div>
+
 <button id="spin">🎡 دُر العجلة | SPIN THE WHEEL</button>
+
 <div id="result" class="result">
 <h2>🎉 مبروك! | FÉLICITATIONS !</h2>
 <div id="prize"></div>
 <div class="code" id="code"></div>
-<div>قدم هذا الكود لفريقنا للاستفادة من جائزتك.<br>
-<span dir="ltr">Présentez ce code à notre équipe pour utiliser votre récompense.</span></div>
+
+<div>
+قدم هذا الكود لفريقنا للاستفادة من جائزتك.<br>
+<span dir="ltr">Présentez ce code à notre équipe pour utiliser votre récompense.</span>
+</div>
+
 <a class="review" href="https://g.page/r/CZV_cSYvHWLMECA/review" target="_blank" rel="noopener">
 ⭐ شارك رأيك معنا | Laisser un avis sur Google
 </a>
 </div>
+
 <div class="note">
 دورة واحدة لكل بطاقة • استعمال واحد فقط<br>
 <span dir="ltr">Un seul spin par carte • Une seule utilisation</span><br>
 احتمالات الفوز قد تختلف حسب الجائزة.
 </div>
+
 </div>
 </div>
-<script>
-const prizes=[
-{name:"Café au choix",ar:"قهوة من اختيارك",pct:35,color:"#D9A51E"},
-{name:"Boisson offerte",ar:"مشروب مجاني",pct:30,color:"#F7F1E5"},
-{name:"Dessert offert",ar:"حلوى مجانية",pct:20,color:"#8B9A72"},
-{name:"Side dish offert",ar:"طبق جانبي مجاني",pct:12.5,color:"#D8C28A"},
-{name:"Pizza offerte",ar:"بيتزا مجانية",pct:2,color:"#B77A1B"},
-{name:"-10% sur votre prochaine visite",ar:"خصم 10% في زيارتك القادمة",pct:0.5,color:"#C8D0B8"}
-];
-const canvas=document.getElementById("wheel"),ctx=canvas.getContext("2d");
-const cx=350,cy=350,r=320,visualArc=2*Math.PI/prizes.length;
-let angle=0,spinning=false;
-function draw(){
-ctx.clearRect(0,0,700,700);let start=angle-Math.PI/2;
-prizes.forEach(p=>{
-const arc=visualArc;ctx.beginPath();ctx.moveTo(cx,cy);ctx.arc(cx,cy,r,start,start+arc);ctx.closePath();
-ctx.fillStyle=p.color;ctx.fill();ctx.strokeStyle="#fff";ctx.lineWidth=5;ctx.stroke();
-ctx.save();ctx.translate(cx,cy);ctx.rotate(start+arc/2);ctx.textAlign="right";ctx.fillStyle="#17351f";
-ctx.font="bold 19px Arial";ctx.fillText(p.name.length>22?"-10% prochaine visite":p.name,285,-12);
-ctx.font="bold 18px Arial";ctx.fillText(p.ar,285,18);ctx.restore();start+=arc;
-});
-ctx.beginPath();ctx.arc(cx,cy,92,0,2*Math.PI);ctx.fillStyle="#094B2D";ctx.fill();ctx.strokeStyle="#D9A51E";ctx.lineWidth=7;ctx.stroke();
-ctx.fillStyle="#fff";ctx.textAlign="center";ctx.font="bold 24px Georgia";ctx.fillText("PAUSE",cx,cy-5);ctx.fillText("& PLATE",cx,cy+25);
-}
-function weightedPick(){let x=Math.random()*100,s=0;for(const p of prizes){s+=p.pct;if(x<=s)return p}return prizes[0]}
-function makeCode(){const c="ABCDEFGHJKLMNPQRSTUVWXYZ23456789";let s="PP-";for(let i=0;i<8;i++)s+=c[Math.floor(Math.random()*c.length)];return s}
-draw();
-document.getElementById("spin").onclick=async()=>{
-if(spinning)return;const cardId=new URLSearchParams(window.location.search).get("card");
-if(!cardId){
-alert("المرجو استعمال رابط بطاقة صالح.");
-return;
-  }
-  spinning=true;
-document.getElementById("spin").disabled=true;
-try{
-const cardRef=doc(db,"cards",cardId);
-const cardSnap=await getDoc(cardRef);
-if(!cardSnap.exists()){
-alert("هذه البطاقة غير موجودة.");
-spinning=false;
-document.getElementById("spin").disabled=false;
-return;
-}
-if(cardSnap.data().status==="used"){
-alert("هذه البطاقة استُعملت من قبل.");
-spinning=false;
-document.getElementById("spin").disabled=false;
-return;
-}
-const winner=weightedPick(),idx=prizes.indexOf(winner),target=(idx+.5)*visualArc;
-const finalRotation=angle+Math.PI*2*(5+Math.floor(Math.random()*3))+(Math.PI*2-target),start=angle,duration=4500,t0=performance.now();
-function anim(t){
-const k=Math.min(1,(t-t0)/duration),ease=1-Math.pow(1-k,4);
-angle=start+(finalRotation-start)*ease;
-draw();
-if(k<1){
-requestAnimationFrame(anim);
-}else{
-const rewardCode=makeCode();
-document.getElementById("prize").innerHTML="<strong>"+winner.ar+"<br><span dir='ltr'>"+winner.name+"</span></strong>";
-document.getElementById("code").textContent=rewardCode;
-document.getElementById("result").style.display="block";
-runTransaction(db,async transaction=>{
-const fresh=await transaction.get(cardRef);
-if(!fresh.exists() || fresh.data().status==="used"){
-throw new Error("USED");
-}
-transaction.update(cardRef,{
-status:"used",
-prize:winner.name,
-rewardCode:rewardCode,
-usedAt:serverTimestamp()
-});
-});
-addDoc(collection(db,"spins"),{
-cardId:cardId,
-prize:winner.name,
-rewardCode:rewardCode,
-createdAt:serverTimestamp()
-});
-}
-}
-requestAnimationFrame(anim);
-}catch(error){
-console.error(error);
-alert("Firebase Error: " + error.message);
-spinning=false;
-document.getElementById("spin").disabled=false;
-}
-};
+
 <script type="module">
+
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import {getFirestore,doc,getDoc,runTransaction,collection,addDoc,serverTimestamp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+import {
+getFirestore,
+doc,
+getDoc,
+runTransaction,
+collection,
+addDoc,
+serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+
 const firebaseConfig = {
 apiKey: "AIzaSyCHON3xqMq-Ob-ul1WWB1lY8Qw2UAdUvX8",
 authDomain: "pause-and-plate-chance-card.firebaseapp.com",
@@ -159,9 +94,288 @@ storageBucket: "pause-and-plate-chance-card.firebasestorage.app",
 messagingSenderId: "593151678023",
 appId: "1:593151678023:web:71336ac1cb40a51800c362"
 };
+
+
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-console.log("Firebase connected");
+
+
+const prizes=[
+{name:"Café au choix",ar:"قهوة من اختيارك",pct:35,color:"#D9A51E"},
+{name:"Boisson offerte",ar:"مشروب مجاني",pct:30,color:"#F7F1E5"},
+{name:"Dessert offert",ar:"حلوى مجانية",pct:20,color:"#8B9A72"},
+{name:"Side dish offert",ar:"طبق جانبي مجاني",pct:12.5,color:"#D8C28A"},
+{name:"Pizza offerte",ar:"بيتزا مجانية",pct:2,color:"#B77A1B"},
+{name:"-10% sur votre prochaine visite",ar:"خصم 10% في زيارتك القادمة",pct:0.5,color:"#C8D0B8"}
+];
+
+
+const canvas=document.getElementById("wheel");
+const ctx=canvas.getContext("2d");
+
+const cx=350,cy=350,r=320;
+const visualArc=2*Math.PI/prizes.length;
+
+let angle=0;
+let spinning=false;
+
+
+function draw(){
+
+ctx.clearRect(0,0,700,700);
+
+let start=angle-Math.PI/2;
+
+prizes.forEach(p=>{
+
+const arc=visualArc;
+
+ctx.beginPath();
+ctx.moveTo(cx,cy);
+ctx.arc(cx,cy,r,start,start+arc);
+ctx.closePath();
+
+ctx.fillStyle=p.color;
+ctx.fill();
+
+ctx.strokeStyle="#fff";
+ctx.lineWidth=5;
+ctx.stroke();
+
+ctx.save();
+
+ctx.translate(cx,cy);
+ctx.rotate(start+arc/2);
+ctx.textAlign="right";
+ctx.fillStyle="#17351f";
+
+ctx.font="bold 19px Arial";
+ctx.fillText(
+p.name.length>22?"-10% prochaine visite":p.name,
+285,
+-12
+);
+
+ctx.font="bold 18px Arial";
+ctx.fillText(p.ar,285,18);
+
+ctx.restore();
+
+start+=arc;
+
+});
+
+
+ctx.beginPath();
+ctx.arc(cx,cy,92,0,2*Math.PI);
+
+ctx.fillStyle="#094B2D";
+ctx.fill();
+
+ctx.strokeStyle="#D9A51E";
+ctx.lineWidth=7;
+ctx.stroke();
+
+ctx.fillStyle="#fff";
+ctx.textAlign="center";
+ctx.font="bold 24px Georgia";
+
+ctx.fillText("PAUSE",cx,cy-5);
+ctx.fillText("& PLATE",cx,cy+25);
+
+}
+
+
+function weightedPick(){
+
+let x=Math.random()*100;
+let s=0;
+
+for(const p of prizes){
+
+s+=p.pct;
+
+if(x<=s)return p;
+
+}
+
+return prizes[0];
+
+}
+
+
+function makeCode(){
+
+const c="ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+
+let s="PP-";
+
+for(let i=0;i<8;i++){
+
+s+=c[Math.floor(Math.random()*c.length)];
+
+}
+
+return s;
+
+}
+
+
+draw();
+
+
+document.getElementById("spin").onclick=async()=>{
+
+if(spinning)return;
+
+
+const cardId=new URLSearchParams(window.location.search).get("card");
+
+
+if(!cardId){
+
+alert("المرجو استعمال رابط بطاقة صالح.");
+
+return;
+
+}
+
+
+spinning=true;
+
+document.getElementById("spin").disabled=true;
+
+
+try{
+
+
+const cardRef=doc(db,"cards",cardId);
+
+const cardSnap=await getDoc(cardRef);
+
+
+if(!cardSnap.exists()){
+
+alert("هذه البطاقة غير موجودة.");
+
+spinning=false;
+document.getElementById("spin").disabled=false;
+
+return;
+
+}
+
+
+if(cardSnap.data().status==="used"){
+
+alert("هذه البطاقة استُعملت من قبل.");
+
+spinning=false;
+document.getElementById("spin").disabled=false;
+
+return;
+
+}
+
+
+const winner=weightedPick();
+
+const idx=prizes.indexOf(winner);
+
+const target=(idx+.5)*visualArc;
+
+const finalRotation=
+angle+
+Math.PI*2*(5+Math.floor(Math.random()*3))+
+(Math.PI*2-target);
+
+const start=angle;
+const duration=4500;
+const t0=performance.now();
+
+
+function anim(t){
+
+const k=Math.min(1,(t-t0)/duration);
+const ease=1-Math.pow(1-k,4);
+
+angle=start+(finalRotation-start)*ease;
+
+draw();
+
+
+if(k<1){
+
+requestAnimationFrame(anim);
+
+}else{
+
+const rewardCode=makeCode();
+
+document.getElementById("prize").innerHTML=
+"<strong>"+winner.ar+
+"<br><span dir='ltr'>"+winner.name+
+"</span></strong>";
+
+document.getElementById("code").textContent=rewardCode;
+
+document.getElementById("result").style.display="block";
+
+
+runTransaction(db,async transaction=>{
+
+const fresh=await transaction.get(cardRef);
+
+if(!fresh.exists() || fresh.data().status==="used"){
+
+throw new Error("USED");
+
+}
+
+transaction.update(cardRef,{
+
+status:"used",
+prize:winner.name,
+rewardCode:rewardCode,
+usedAt:serverTimestamp()
+
+});
+
+});
+
+
+addDoc(collection(db,"spins"),{
+
+cardId:cardId,
+prize:winner.name,
+rewardCode:rewardCode,
+createdAt:serverTimestamp()
+
+});
+
+}
+
+}
+
+
+requestAnimationFrame(anim);
+
+
+}catch(error){
+
+console.error(error);
+
+alert("Firebase Error: " + error.message);
+
+spinning=false;
+
+document.getElementById("spin").disabled=false;
+
+}
+
+};
+
 </script>
+
 </body>
 </html>
