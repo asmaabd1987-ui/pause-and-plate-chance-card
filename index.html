@@ -141,6 +141,12 @@ createdAt:serverTimestamp()
 }
 }
 requestAnimationFrame(anim);
+}catch(error){
+console.error(error);
+alert("وقع خطأ في الاتصال مع Firebase.");
+spinning=false;
+document.getElementById("spin").disabled=false;
+}
 };
 </script>
 <script type="module">
