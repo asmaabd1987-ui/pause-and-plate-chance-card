@@ -1,33 +1,820 @@
-Pause & Plate — Admin :root{ --green:#094B2D; --gold:#D9A51E; --cream:#F7F1E5; --ink:#18251b; } *{box-sizing:border-box} body{ margin:0; background:var(--cream); color:var(--ink); font-family:Arial,"Noto Sans Arabic",sans-serif; } .wrap{ max-width:850px; margin:auto; padding:22px; } .card{ background:#fffdf8; border-radius:28px; padding:28px; box-shadow:0 14px 40px #00000018; } .brand{ text-align:center; color:var(--green); font-family:Georgia,serif; font-size:28px; font-weight:700; direction:ltr; } .brand span{ color:var(--gold); } h1{ text-align:center; color:var(--green); margin:12px 0 24px; } h2{ color:var(--green); margin-top:30px; } label{ display:block; margin-top:16px; margin-bottom:7px; font-weight:bold; } input{ width:100%; padding:14px; border:1px solid #ddd; border-radius:12px; font-size:17px; } button{ width:100%; margin-top:18px; padding:15px; border:0; border-radius:999px; background:var(--green); color:white; font-size:17px; font-weight:bold; cursor:pointer; } button:disabled{ opacity:.5; } #adminPanel{ display:none; } #message{ margin-top:18px; text-align:center; font-weight:bold; line-height:1.7; } .success{ color:var(--green); } .error{ color:#b00020; } .result{ margin-top:22px; padding:18px; background:#eef4ec; border-radius:16px; line-height:2; text-align:center; } .qr-grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(190px,1fr)); gap:18px; margin-top:20px; } .qr-card{ background:white; border:1px solid #ddd; border-radius:16px; padding:14px; text-align:center; } .qr-card img{ width:160px; height:160px; display:block; margin:0 auto 10px; } .qr-id{ font-weight:bold; color:var(--green); direction:ltr; } .download{ margin-top:10px; padding:10px; font-size:14px; } 
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
-PAUSE & PLATE 
+<title>Pause & Plate — Admin</title>
 
-🔐 Admin Login 
+<style>
+:root{
+  --green:#094B2D;
+  --gold:#D9A51E;
+  --cream:#F7F1E5;
+  --ink:#18251b;
+}
 
-📧 Email
+*{box-sizing:border-box}
 
-<input id="email" type="email" placeholder="admin@example.com"
+body{
+  margin:0;
+  background:var(--cream);
+  color:var(--ink);
+  font-family:Arial,"Noto Sans Arabic",sans-serif;
+}
 
-🔑 Mot de passe
+.wrap{
+  max-width:850px;
+  margin:auto;
+  padding:22px;
+}
 
-<input id="password" type="password" placeholder="••••••••"
+.card{
+  background:#fffdf8;
+  border-radius:28px;
+  padding:28px;
+  box-shadow:0 14px 40px #00000018;
+}
 
-دخول | Connexion 
+.brand{
+  text-align:center;
+  color:var(--green);
+  font-family:Georgia,serif;
+  font-size:28px;
+  font-weight:700;
+  direction:ltr;
+}
 
-🎫 لوحة الإدارة 
+.brand span{
+  color:var(--gold);
+}
 
-مرحبا بك في لوحة الإدارة 
+h1{
+  text-align:center;
+  color:var(--green);
+  margin:12px 0 24px;
+}
 
-➕ توليد بطاقات جديدة عدد البطاقات التي تريد توليدها 
+h2{
+  color:var(--green);
+  margin-top:30px;
+}
 
-<input id="quantity" type="number" min="1" max="1000" value="10"
+label{
+  display:block;
+  margin-top:16px;
+  margin-bottom:7px;
+  font-weight:bold;
+}
 
-🎫 توليد البطاقات 
+input{
+  width:100%;
+  padding:14px;
+  border:1px solid #ddd;
+  border-radius:12px;
+  font-size:17px;
+}
 
-📱 QR Codes 📱 توليد QR Codes للبطاقات 
+button{
+  width:100%;
+  margin-top:18px;
+  padding:15px;
+  border:0;
+  border-radius:999px;
+  background:var(--green);
+  color:white;
+  font-size:17px;
+  font-weight:bold;
+  cursor:pointer;
+}
 
-تسجيل الخروج 
+button:disabled{
+  opacity:.5;
+}
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"; import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js"; import { getFirestore, doc, setDoc, getDocs, collection } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js"; const firebaseConfig = { apiKey: "AIzaSyCHON3xqMq-Ob-ul1WWB1lY8Qw2UAdUvX8", authDomain: "pause-and-plate-chance-card.firebaseapp.com", projectId: "pause-and-plate-chance-card", storageBucket: "pause-and-plate-chance-card.firebasestorage.app", messagingSenderId: "593151678023", appId: "1:593151678023:web:71336ac1cb40a51800c362" }; const app = initializeApp(firebaseConfig); const auth = getAuth(app); const db = getFirestore(app); const loginPanel = document.getElementById("loginPanel"); const adminPanel = document.getElementById("adminPanel"); const message = document.getElementById("message"); const BASE_URL = "https://asmaabd1987-ui.github.io/pause-and-plate-chance-card/?card="; function showMessage(text,type=""){ message.textContent=text; message.className=type; } document .getElementById("login") .onclick = async()=>{ const email = document .getElementById("email") .value .trim(); const password = document .getElementById("password") .value; if(!email || !password){ showMessage( "المرجو إدخال الإيميل وكلمة السر.", "error" ); return; } try{ showMessage( "جاري تسجيل الدخول..." ); await signInWithEmailAndPassword( auth, email, password ); showMessage( "تم الدخول بنجاح.", "success" ); }catch(error){ console.error(error); showMessage( "الإيميل أو كلمة السر غير صحيحة.", "error" ); } }; onAuthStateChanged( auth, (user)=>{ if(user){ loginPanel.style.display="none"; adminPanel.style.display="block"; }else{ loginPanel.style.display="block"; adminPanel.style.display="none"; } }); document .getElementById("generate") .onclick = async()=>{ const quantity = parseInt( document .getElementById("quantity") .value ); if(!quantity || quantity 1000){ showMessage( "الحد الأقصى هو 1000 بطاقة في كل مرة.", "error" ); return; } const button = document .getElementById("generate"); button.disabled=true; button.textContent= "جاري التوليد..."; try{ const cardsRef = collection( db, "authorizedUsers", "Admin", "Cards" ); const existingSnapshot = await getDocs(cardsRef); let maxNumber=0; existingSnapshot.forEach( (documentSnapshot)=>{ const id = documentSnapshot.id; if(id.startsWith("PP-")){ const number = parseInt( id.replace("PP-","") ); if(number > maxNumber){ maxNumber=number; } } }); const generated=[]; for( let i=1; i
-"+ generated .join("
-"); showMessage( "تم الحفظ بنجاح.", "success" ); }catch(error){ console.error(error); showMessage( "Firebase Error: "+error.message, "error" ); } button.disabled=false; button.textContent= "🎫 توليد البطاقات"; }; document .getElementById("loadQR") .onclick = async()=>{ const button = document .getElementById("loadQR"); const qrResult = document .getElementById("qrResult"); button.disabled=true; button.textContent= "جاري تحميل البطاقات..."; qrResult.innerHTML=""; try{ const cardsRef = collection( db, "authorizedUsers", "Admin", "Cards" ); const snapshot = await getDocs(cardsRef); if(snapshot.empty){ showMessage( "ما كايناش حتى بطاقة.", "error" ); button.disabled=false; button.textContent= "📱 توليد QR Codes للبطاقات"; return; } let cards=[]; snapshot.forEach( (documentSnapshot)=>{ cards.push( documentSnapshot.id ); }); cards.sort( (a,b)=>{ const numA = parseInt( a.replace("PP-","") ); const numB = parseInt( b.replace("PP-","") ); return numA-numB; }); cards.forEach( (cardId)=>{ const cardBox = document.createElement("div"); cardBox.className= "qr-card"; const qrDiv = document.createElement("div"); const idText = document.createElement("div"); idText.className= "qr-id"; idText.textContent= cardId; const downloadButton = document.createElement("button"); downloadButton.className= "download"; downloadButton.textContent= "⬇️ تحميل QR"; cardBox.appendChild(qrDiv); cardBox.appendChild(idText); cardBox.appendChild(downloadButton); qrResult.appendChild(cardBox); const cardURL = BASE_URL+ encodeURIComponent(cardId); new QRCode( qrDiv, { text:cardURL, width:160, height:160, correctLevel: QRCode.CorrectLevel.H } ); downloadButton.onclick=()=>{ const canvas = qrDiv.querySelector("canvas"); const image = canvas.toDataURL( "image/png" ); const link = document.createElement("a"); link.href=image; link.download= cardId+ ".png"; link.click(); }; }); showMessage( "تم توليد QR Codes لجميع البطاقات بنجاح.", "success" ); }catch(error){ console.error(error); showMessage( "Firebase Error: "+error.message, "error" ); } button.disabled=false; button.textContent= "📱 توليد QR Codes للبطاقات"; }; document .getElementById("logout") .onclick = async()=>{ await signOut(auth); }; 
+#adminPanel{
+  display:none;
+}
+
+#message{
+  margin-top:18px;
+  text-align:center;
+  font-weight:bold;
+  line-height:1.7;
+}
+
+.success{
+  color:var(--green);
+}
+
+.error{
+  color:#b00020;
+}
+
+.result{
+  margin-top:22px;
+  padding:18px;
+  background:#eef4ec;
+  border-radius:16px;
+  line-height:2;
+  text-align:center;
+}
+
+.qr-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(190px,1fr));
+  gap:18px;
+  margin-top:20px;
+}
+
+.qr-card{
+  background:white;
+  border:1px solid #ddd;
+  border-radius:16px;
+  padding:14px;
+  text-align:center;
+}
+
+.qr-card img{
+  width:160px;
+  height:160px;
+  display:block;
+  margin:0 auto 10px;
+}
+
+.qr-id{
+  font-weight:bold;
+  color:var(--green);
+  direction:ltr;
+}
+
+.download{
+  margin-top:10px;
+  padding:10px;
+  font-size:14px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="wrap">
+<div class="card">
+
+<div class="brand">
+PAUSE <span>&amp;</span> PLATE
+</div>
+
+<div id="loginPanel">
+
+<h1>🔐 Admin Login</h1>
+
+<label>📧 Email</label>
+
+<input
+id="email"
+type="email"
+placeholder="admin@example.com"
+>
+
+<label>🔑 Mot de passe</label>
+
+<input
+id="password"
+type="password"
+placeholder="••••••••"
+>
+
+<button id="login">
+دخول | Connexion
+</button>
+
+</div>
+
+
+<div id="adminPanel">
+
+<h1>🎫 لوحة الإدارة</h1>
+
+<p style="text-align:center">
+مرحبا بك في لوحة الإدارة
+</p>
+
+<h2>➕ توليد بطاقات جديدة</h2>
+
+<label>
+عدد البطاقات التي تريد توليدها
+</label>
+
+<input
+id="quantity"
+type="number"
+min="1"
+max="1000"
+value="10"
+>
+
+<button id="generate">
+🎫 توليد البطاقات
+</button>
+
+<div
+id="result"
+class="result"
+style="display:none">
+</div>
+
+
+<h2>📱 QR Codes</h2>
+
+<button id="loadQR">
+📱 توليد QR Codes للبطاقات
+</button>
+
+<div
+id="qrResult"
+class="qr-grid">
+</div>
+
+
+<button id="logout">
+تسجيل الخروج
+</button>
+
+</div>
+
+
+<div id="message"></div>
+
+</div>
+</div>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+
+<script type="module">
+
+import {
+initializeApp
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+
+import {
+getAuth,
+signInWithEmailAndPassword,
+onAuthStateChanged,
+signOut
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+
+import {
+getFirestore,
+doc,
+setDoc,
+getDocs,
+collection
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+
+const firebaseConfig = {
+
+apiKey:
+"AIzaSyCHON3xqMq-Ob-ul1WWB1lY8Qw2UAdUvX8",
+
+authDomain:
+"pause-and-plate-chance-card.firebaseapp.com",
+
+projectId:
+"pause-and-plate-chance-card",
+
+storageBucket:
+"pause-and-plate-chance-card.firebasestorage.app",
+
+messagingSenderId:
+"593151678023",
+
+appId:
+"1:593151678023:web:71336ac1cb40a51800c362"
+
+};
+
+
+const app = initializeApp(firebaseConfig);
+
+const auth = getAuth(app);
+
+const db = getFirestore(app);
+
+
+const loginPanel =
+document.getElementById("loginPanel");
+
+const adminPanel =
+document.getElementById("adminPanel");
+
+const message =
+document.getElementById("message");
+
+
+const BASE_URL =
+"https://asmaabd1987-ui.github.io/pause-and-plate-chance-card/?card=";
+
+
+function showMessage(text,type=""){
+
+message.textContent=text;
+
+message.className=type;
+
+}
+
+
+document
+.getElementById("login")
+.onclick = async()=>{
+
+const email =
+document
+.getElementById("email")
+.value
+.trim();
+
+const password =
+document
+.getElementById("password")
+.value;
+
+
+if(!email || !password){
+
+showMessage(
+"المرجو إدخال الإيميل وكلمة السر.",
+"error"
+);
+
+return;
+
+}
+
+
+try{
+
+showMessage(
+"جاري تسجيل الدخول..."
+);
+
+
+await signInWithEmailAndPassword(
+auth,
+email,
+password
+);
+
+
+showMessage(
+"تم الدخول بنجاح.",
+"success"
+);
+
+
+}catch(error){
+
+console.error(error);
+
+showMessage(
+"الإيميل أو كلمة السر غير صحيحة.",
+"error"
+);
+
+}
+
+};
+
+
+onAuthStateChanged(
+auth,
+(user)=>{
+
+if(user){
+
+loginPanel.style.display="none";
+
+adminPanel.style.display="block";
+
+}else{
+
+loginPanel.style.display="block";
+
+adminPanel.style.display="none";
+
+}
+
+});
+
+
+document
+.getElementById("generate")
+.onclick = async()=>{
+
+const quantity =
+parseInt(
+document
+.getElementById("quantity")
+.value
+);
+
+
+if(!quantity || quantity < 1){
+
+showMessage(
+"دخل عدد صحيح للبطاقات.",
+"error"
+);
+
+return;
+
+}
+
+
+if(quantity > 1000){
+
+showMessage(
+"الحد الأقصى هو 1000 بطاقة في كل مرة.",
+"error"
+);
+
+return;
+
+}
+
+
+const button =
+document
+.getElementById("generate");
+
+button.disabled=true;
+
+button.textContent=
+"جاري التوليد...";
+
+
+try{
+
+
+const cardsRef =
+collection(
+db,
+"authorizedUsers",
+"Admin",
+"Cards"
+);
+
+
+const existingSnapshot =
+await getDocs(cardsRef);
+
+
+let maxNumber=0;
+
+
+existingSnapshot.forEach(
+(documentSnapshot)=>{
+
+const id =
+documentSnapshot.id;
+
+
+if(id.startsWith("PP-")){
+
+const number =
+parseInt(
+id.replace("PP-","")
+);
+
+
+if(number > maxNumber){
+
+maxNumber=number;
+
+}
+
+}
+
+});
+
+
+const generated=[];
+
+
+for(
+let i=1;
+i<=quantity;
+i++
+){
+
+const nextNumber =
+maxNumber+i;
+
+
+const cardId =
+"PP-"+String(
+nextNumber
+).padStart(6,"0");
+
+
+await setDoc(
+
+doc(
+db,
+"authorizedUsers",
+"Admin",
+"Cards",
+cardId
+),
+
+{
+
+status:"unused",
+
+createdAt:
+new Date()
+
+}
+
+);
+
+
+generated.push(cardId);
+
+}
+
+
+document
+.getElementById("result")
+.style.display="block";
+
+
+document
+.getElementById("result")
+.innerHTML=
+
+"🎉 تم توليد "+
+generated.length+
+" بطاقة بنجاح!<br><br>"+
+
+generated
+.join("<br>");
+
+
+showMessage(
+"تم الحفظ بنجاح.",
+"success"
+);
+
+
+}catch(error){
+
+console.error(error);
+
+showMessage(
+"Firebase Error: "+error.message,
+"error"
+);
+
+}
+
+
+button.disabled=false;
+
+button.textContent=
+"🎫 توليد البطاقات";
+
+};
+
+
+document
+.getElementById("loadQR")
+.onclick = async()=>{
+
+const button =
+document
+.getElementById("loadQR");
+
+const qrResult =
+document
+.getElementById("qrResult");
+
+
+button.disabled=true;
+
+button.textContent=
+"جاري تحميل البطاقات...";
+
+
+qrResult.innerHTML="";
+
+
+try{
+
+
+const cardsRef =
+collection(
+db,
+"authorizedUsers",
+"Admin",
+"Cards"
+);
+
+
+const snapshot =
+await getDocs(cardsRef);
+
+
+if(snapshot.empty){
+
+showMessage(
+"ما كايناش حتى بطاقة.",
+"error"
+);
+
+button.disabled=false;
+
+button.textContent=
+"📱 توليد QR Codes للبطاقات";
+
+return;
+
+}
+
+
+let cards=[];
+
+
+snapshot.forEach(
+(documentSnapshot)=>{
+
+cards.push(
+documentSnapshot.id
+);
+
+});
+
+
+cards.sort(
+(a,b)=>{
+
+const numA =
+parseInt(
+a.replace("PP-","")
+);
+
+const numB =
+parseInt(
+b.replace("PP-","")
+);
+
+return numA-numB;
+
+});
+
+
+cards.forEach(
+(cardId)=>{
+
+const cardBox =
+document.createElement("div");
+
+cardBox.className=
+"qr-card";
+
+
+const qrDiv =
+document.createElement("div");
+
+
+const idText =
+document.createElement("div");
+
+idText.className=
+"qr-id";
+
+idText.textContent=
+cardId;
+
+
+const downloadButton =
+document.createElement("button");
+
+downloadButton.className=
+"download";
+
+downloadButton.textContent=
+"⬇️ تحميل QR";
+
+
+cardBox.appendChild(qrDiv);
+
+cardBox.appendChild(idText);
+
+cardBox.appendChild(downloadButton);
+
+qrResult.appendChild(cardBox);
+
+
+const cardURL =
+BASE_URL+
+encodeURIComponent(cardId);
+
+
+new QRCode(
+qrDiv,
+{
+
+text:cardURL,
+
+width:160,
+
+height:160,
+
+correctLevel:
+QRCode.CorrectLevel.H
+
+}
+
+);
+
+
+downloadButton.onclick=()=>{
+
+const canvas =
+qrDiv.querySelector("canvas");
+
+const image =
+canvas.toDataURL(
+"image/png"
+);
+
+
+const link =
+document.createElement("a");
+
+link.href=image;
+
+link.download=
+cardId+
+".png";
+
+link.click();
+
+};
+
+});
+
+
+showMessage(
+"تم توليد QR Codes لجميع البطاقات بنجاح.",
+"success"
+);
+
+
+}catch(error){
+
+console.error(error);
+
+showMessage(
+"Firebase Error: "+error.message,
+"error"
+);
+
+}
+
+
+button.disabled=false;
+
+button.textContent=
+"📱 توليد QR Codes للبطاقات";
+
+};
+
+
+document
+.getElementById("logout")
+.onclick = async()=>{
+
+await signOut(auth);
+
+};
+
+
+</script>
+
+</body>
+</html>
+من بعد:
+حيدي الكود القديم من admin.html.
+لسقي هاد الكود كامل.
+ديري Commit changes.
+دخلي لصفحة Admin.
+ضغطي 📱 توليد QR Codes للبطاقات.
+غادي يبانولك QR ديال PP-000001 حتى PP-000101، وكل واحد عندو زر تحميل بوحدو.
