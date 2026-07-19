@@ -130,36 +130,25 @@ PAUSE <span>&amp;</span> PLATE
 
 <h1>🔐 Admin Login</h1>
 
-<label>📱 رقم الهاتف</label>
+<label>📧 Email</label>
 
 <input
-id="phone"
-type="tel"
-value="+212667060032"
-placeholder="+2126XXXXXXXX"
+id="email"
+type="email"
+placeholder="admin@example.com"
 >
 
-<div id="recaptcha-container"></div>
-
-<button id="sendCode">
-إرسال كود التحقق عبر SMS
-</button>
-
-<div id="codeSection" style="display:none">
-
-<label>🔑 كود التحقق</label>
+<label>🔑 Mot de passe</label>
 
 <input
-id="verificationCode"
-type="number"
-placeholder="أدخل الكود"
+id="password"
+type="password"
+placeholder="••••••••"
 >
 
-<button id="verifyCode">
-تأكيد الدخول
+<button id="login">
+دخول | Connexion
 </button>
-
-</div>
 
 </div>
 
@@ -212,8 +201,7 @@ initializeApp
 
 import {
 getAuth,
-RecaptchaVerifier,
-signInWithPhoneNumber,
+signInWithEmailAndPassword,
 onAuthStateChanged,
 signOut
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
@@ -224,10 +212,7 @@ getFirestore,
 doc,
 setDoc,
 getDocs,
-collection,
-query,
-orderBy,
-limit
+collection
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 
@@ -261,9 +246,6 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 
 
-const ADMIN_PHONE = "+212667060032";
-
-
 const loginPanel =
 document.getElementById("loginPanel");
 
@@ -283,34 +265,26 @@ message.className=type;
 }
 
 
-const recaptchaVerifier =
-new RecaptchaVerifier(
-auth,
-"recaptcha-container",
-{
-size:"normal"
-}
-);
-
-
-let confirmationResult;
-
-
 document
-.getElementById("sendCode")
+.getElementById("login")
 .onclick = async()=>{
 
-const phone =
+const email =
 document
-.getElementById("phone")
+.getElementById("email")
 .value
 .trim();
 
+const password =
+document
+.getElementById("password")
+.value;
 
-if(phone !== ADMIN_PHONE){
+
+if(!email || !password){
 
 showMessage(
-"هذا الرقم غير مصرح له بالدخول.",
+"المرجو إدخال الإيميل وكلمة السر.",
 "error"
 );
 
@@ -322,81 +296,29 @@ return;
 try{
 
 showMessage(
-"جاري إرسال كود التحقق..."
+"جاري تسجيل الدخول..."
 );
 
 
-confirmationResult =
-await signInWithPhoneNumber(
+await signInWithEmailAndPassword(
 auth,
-phone,
-recaptchaVerifier
+email,
+password
 );
 
-
-document
-.getElementById("codeSection")
-.style.display="block";
-
-
-showMessage(
-"تم إرسال كود التحقق إلى هاتفك.",
-"success"
-);
-
-
-}catch(error){
-
-console.error(error);
-
-showMessage(
-"خطأ: "+error.message,
-"error"
-);
-
-}
-
-};
-
-
-document
-.getElementById("verifyCode")
-.onclick = async()=>{
-
-const code =
-document
-.getElementById("verificationCode")
-.value
-.trim();
-
-
-if(!confirmationResult){
-
-showMessage(
-"المرجو طلب كود التحقق أولا.",
-"error"
-);
-
-return;
-
-}
-
-
-try{
-
-await confirmationResult.confirm(code);
 
 showMessage(
 "تم الدخول بنجاح.",
 "success"
 );
 
+
 }catch(error){
 
 console.error(error);
 
 showMessage(
-"كود التحقق غير صحيح.",
+"الإيميل أو كلمة السر غير صحيحة.",
 "error"
 );
 
