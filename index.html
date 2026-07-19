@@ -32,7 +32,7 @@ button:disabled{opacity:.55;cursor:not-allowed}
 <div class="brand">PAUSE <span>&amp;</span> PLATE</div>
 <h1>🎁 بطاقة الحظ | CHANCE CARD</h1>
 <div class="sub">
-دُر العجلة واكتشف جائزتك!<br>
+دُور العجلة واكتشف جائزتك!<br>
 <span dir="ltr">Tournez la roue et découvrez votre récompense !</span>
 </div>
 <div class="wheelbox">
@@ -57,7 +57,8 @@ button:disabled{opacity:.55;cursor:not-allowed}
 </div>
 </div>
 </div>
-<script>
+<script type="module">
+  
 const prizes=[
 {name:"Café au choix",ar:"قهوة من اختيارك",pct:35,color:"#D9A51E"},
 {name:"Boisson offerte",ar:"مشروب مجاني",pct:30,color:"#F7F1E5"},
@@ -82,7 +83,20 @@ ctx.beginPath();ctx.arc(cx,cy,92,0,2*Math.PI);ctx.fillStyle="#094B2D";ctx.fill()
 ctx.fillStyle="#fff";ctx.textAlign="center";ctx.font="bold 24px Georgia";ctx.fillText("PAUSE",cx,cy-5);ctx.fillText("& PLATE",cx,cy+25);
 }
 function weightedPick(){let x=Math.random()*100,s=0;for(const p of prizes){s+=p.pct;if(x<=s)return p}return prizes[0]}
-function makeCode(){const c="ABCDEFGHJKLMNPQRSTUVWXYZ23456789";let s="PP-";for(let i=0;i<8;i++)s+=c[Math.floor(Math.random()*c.length)];return s}
+function makeCode(){conimport { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, doc, getDoc, runTransaction, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCHON3xqMq-Ob-ul1WWB1lY8Qw2UAdUvX8",
+  authDomain: "pause-and-plate-chance-card.firebaseapp.com",
+  projectId: "pause-and-plate-chance-card",
+  storageBucket: "pause-and-plate-chance-card.firebasestorage.app",
+  messagingSenderId: "593151678023",
+  appId: "1:593151678023:web:71336ac1cb40a51800c362"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);st c="ABCDEFGHJKLMNPQRSTUVWXYZ23456789";let s="PP-";for(let i=0;i<8;i++)s+=c[Math.floor(Math.random()*c.length)];return s}
 draw();
 document.getElementById("spin").onclick=()=>{
 if(spinning)return;spinning=true;document.getElementById("spin").disabled=true;
