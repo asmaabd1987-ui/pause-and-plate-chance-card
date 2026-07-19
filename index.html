@@ -249,7 +249,7 @@ document.getElementById("spin").disabled=true;
 try{
 
 
-const cardRef=doc(db,"cards",cardId);
+const cardRef=doc(db,"authorizedUsers","Admin","Cards",cardId);
 
 const cardSnap=await getDoc(cardRef);
 
