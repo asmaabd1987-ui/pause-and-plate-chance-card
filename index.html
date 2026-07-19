@@ -58,7 +58,18 @@ button:disabled{opacity:.55;cursor:not-allowed}
 </div>
 </div>
 <script type="module">
-  
+ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, doc, getDoc, runTransaction, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+const firebaseConfig = {
+  apiKey: "AIzaSyCHON3xqMq-Ob-ul1WWB1lY8Qw2UAdUvX8",
+  authDomain: "pause-and-plate-chance-card.firebaseapp.com",
+  projectId: "pause-and-plate-chance-card",
+  storageBucket: "pause-and-plate-chance-card.firebasestorage.app",
+  messagingSenderId: "593151678023",
+  appId: "1:593151678023:web:71336ac1cb40a51800c362"
+};
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app); 
 const prizes=[
 {name:"Café au choix",ar:"قهوة من اختيارك",pct:35,color:"#D9A51E"},
 {name:"Boisson offerte",ar:"مشروب مجاني",pct:30,color:"#F7F1E5"},
@@ -85,7 +96,6 @@ ctx.fillStyle="#fff";ctx.textAlign="center";ctx.font="bold 24px Georgia";ctx.fil
 function weightedPick(){let x=Math.random()*100,s=0;for(const p of prizes){s+=p.pct;if(x<=s)return p}return prizes[0]}
 function makeCode(){conimport { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getFirestore, doc, getDoc, runTransaction, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
 const firebaseConfig = {
   apiKey: "AIzaSyCHON3xqMq-Ob-ul1WWB1lY8Qw2UAdUvX8",
   authDomain: "pause-and-plate-chance-card.firebaseapp.com",
@@ -94,7 +104,6 @@ const firebaseConfig = {
   messagingSenderId: "593151678023",
   appId: "1:593151678023:web:71336ac1cb40a51800c362"
 };
-
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);st c="ABCDEFGHJKLMNPQRSTUVWXYZ23456789";let s="PP-";for(let i=0;i<8;i++)s+=c[Math.floor(Math.random()*c.length)];return s}
 draw();
