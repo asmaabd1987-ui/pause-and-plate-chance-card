@@ -90,6 +90,22 @@ if(!cardId){
 alert("المرجو استعمال رابط بطاقة صالح.");
 return;
   }
+  spinning=true;
+document.getElementById("spin").disabled=true;
+const cardRef=doc(db,"cards",cardId);
+const cardSnap=await getDoc(cardRef);
+if(!cardSnap.exists()){
+alert("هذه البطاقة غير موجودة.");
+spinning=false;
+document.getElementById("spin").disabled=false;
+return;
+}
+if(cardSnap.data().status==="used"){
+alert("هذه البطاقة استُعملت من قبل.");
+spinning=false;
+document.getElementById("spin").disabled=false;
+return;
+}
 const winner=weightedPick(),idx=prizes.indexOf(winner),target=(idx+.5)*visualArc;
 const finalRotation=angle+Math.PI*2*(5+Math.floor(Math.random()*3))+(Math.PI*2-target),start=angle,duration=4500,t0=performance.now();
 function anim(t){const k=Math.min(1,(t-t0)/duration),ease=1-Math.pow(1-k,4);angle=start+(finalRotation-start)*ease;draw();
