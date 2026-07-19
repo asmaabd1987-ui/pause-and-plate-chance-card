@@ -92,6 +92,7 @@ return;
   }
   spinning=true;
 document.getElementById("spin").disabled=true;
+try{
 const cardRef=doc(db,"cards",cardId);
 const cardSnap=await getDoc(cardRef);
 if(!cardSnap.exists()){
