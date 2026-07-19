@@ -1,0 +1,330 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pause & Plate — Admin</title>
+<style>
+:root{--green:#094B2D;--gold:#D9A51E;--cream:#F7F1E5;--ink:#18251b}
+*{box-sizing:border-box}
+body{margin:0;background:var(--cream);color:var(--ink);font-family:Arial,"Noto Sans Arabic",sans-serif}
+.wrap{max-width:1050px;margin:auto;padding:22px}
+.card{background:#fffdf8;border-radius:28px;padding:28px;box-shadow:0 14px 40px #00000018}
+.brand{text-align:center;color:var(--green);font-family:Georgia,serif;font-size:28px;font-weight:700;direction:ltr}
+.brand span{color:var(--gold)}
+h1{text-align:center;color:var(--green);margin:12px 0 24px}
+h2{color:var(--green);margin-top:30px}
+label{display:block;margin-top:16px;margin-bottom:7px;font-weight:bold}
+input{width:100%;padding:14px;border:1px solid #ddd;border-radius:12px;font-size:17px}
+button{width:100%;margin-top:18px;padding:15px;border:0;border-radius:999px;background:var(--green);color:white;font-size:17px;font-weight:bold;cursor:pointer}
+button:disabled{opacity:.5}
+#adminPanel{display:none}
+#message{margin-top:18px;text-align:center;font-weight:bold;line-height:1.7}
+.success{color:var(--green)} .error{color:#b00020}
+.result{margin-top:22px;padding:18px;background:#eef4ec;border-radius:16px;line-height:2;text-align:center}
+.qr-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:18px;margin-top:20px}
+.qr-card{background:white;border:1px solid #ddd;border-radius:16px;padding:14px;text-align:center}
+.qr-card img{width:160px;height:160px;display:block;margin:0 auto 10px}
+.qr-id{font-weight:bold;color:var(--green);direction:ltr}
+.download{margin-top:10px;padding:10px;font-size:14px}
+.info{background:#f3f7f0;border-radius:16px;padding:16px;margin-top:15px;line-height:1.8}
+</style>
+</head>
+<body>
+<div class="wrap"><div class="card">
+<div class="brand">PAUSE <span>&amp;</span> PLATE</div>
+
+<div id="loginPanel">
+<h1>🔐 Admin Login</h1>
+<label>📧 Email</label>
+<input id="email" type="email" placeholder="admin@example.com">
+<label>🔑 Mot de passe</label>
+<input id="password" type="password" placeholder="••••••••">
+<button id="login">دخول | Connexion</button>
+</div>
+
+<div id="adminPanel">
+<h1>🎫 لوحة الإدارة</h1>
+<p style="text-align:center">مرحبا بك في لوحة الإدارة</p>
+
+<h2>➕ توليد بطاقات جديدة</h2>
+<label>عدد البطاقات التي تريد توليدها</label>
+<input id="quantity" type="number" min="1" max="1000" value="10">
+<button id="generate">🎫 توليد البطاقات</button>
+<div id="result" class="result" style="display:none"></div>
+
+<h2>📱 QR Codes</h2>
+<button id="loadQR">📱 توليد QR Codes للبطاقات</button>
+<div id="qrResult" class="qr-grid"></div>
+
+<h2>📄 PDF ديال البطاقات</h2>
+<div class="info">
+8 بطاقات في كل صفحة A4 — RECTO + VERSO.<br>
+كل بطاقة مربوطة بالـ QR Code ديالها، والـ VERSO كيتولد بالترتيب المناسب للطباعة Recto-Verso.
+</div>
+<button id="makePDF">📄 تحميل PDF Recto + Verso</button>
+<button id="makeNewPDF" style="background:var(--gold);color:#17351f">🆕 PDF ديال البطاقات الجديدة فقط</button>
+
+<button id="logout">تسجيل الخروج</button>
+</div>
+<div id="message"></div>
+</div></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<script type="module">
+import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {getAuth,signInWithEmailAndPassword,onAuthStateChanged,signOut} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import {getFirestore,doc,setDoc,getDocs,collection} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig={
+apiKey:"AIzaSyCHON3xqMq-Ob-ul1WWB1lY8Qw2UAdUvX8",
+authDomain:"pause-and-plate-chance-card.firebaseapp.com",
+projectId:"pause-and-plate-chance-card",
+storageBucket:"pause-and-plate-chance-card.firebasestorage.app",
+messagingSenderId:"593151678023",
+appId:"1:593151678023:web:71336ac1cb40a51800c362"
+};
+
+const app=initializeApp(firebaseConfig);
+const auth=getAuth(app);
+const db=getFirestore(app);
+
+const BASE_URL="https://asmaabd1987-ui.github.io/pause-and-plate-chance-card/?card=";
+const CARDS_PATH=["authorizedUsers","Admin","Cards"];
+
+const loginPanel=document.getElementById("loginPanel");
+const adminPanel=document.getElementById("adminPanel");
+const message=document.getElementById("message");
+
+function showMessage(text,type=""){message.textContent=text;message.className=type;}
+
+function cardCollection(){return collection(db,...CARDS_PATH);}
+function cardDoc(id){return doc(db,...CARDS_PATH,id);}
+
+async function getCards(){
+const snap=await getDocs(cardCollection());
+const cards=[];
+snap.forEach(s=>{if(/^PP-\d+$/.test(s.id))cards.push(s.id);});
+cards.sort((a,b)=>parseInt(a.slice(3))-parseInt(b.slice(3)));
+return cards;
+}
+
+document.getElementById("login").onclick=async()=>{
+const email=document.getElementById("email").value.trim();
+const password=document.getElementById("password").value;
+if(!email||!password){showMessage("المرجو إدخال الإيميل وكلمة السر.","error");return;}
+try{showMessage("جاري تسجيل الدخول...");await signInWithEmailAndPassword(auth,email,password);showMessage("تم الدخول بنجاح.","success");}
+catch(e){console.error(e);showMessage("الإيميل أو كلمة السر غير صحيحة.","error");}
+};
+
+onAuthStateChanged(auth,user=>{
+loginPanel.style.display=user?"none":"block";
+adminPanel.style.display=user?"block":"none";
+});
+
+document.getElementById("generate").onclick=async()=>{
+const quantity=parseInt(document.getElementById("quantity").value);
+if(!quantity||quantity<1){showMessage("دخل عدد صحيح للبطاقات.","error");return;}
+if(quantity>1000){showMessage("الحد الأقصى هو 1000 بطاقة.","error");return;}
+const button=document.getElementById("generate");
+button.disabled=true;button.textContent="جاري التوليد...";
+try{
+const existing=await getCards();
+let maxNumber=existing.length?Math.max(...existing.map(x=>parseInt(x.slice(3)))):0;
+const generated=[];
+for(let i=1;i<=quantity;i++){
+const cardId="PP-"+String(maxNumber+i).padStart(6,"0");
+await setDoc(cardDoc(cardId),{status:"unused",printed:false,createdAt:new Date()});
+generated.push(cardId);
+}
+const result=document.getElementById("result");
+result.style.display="block";
+result.innerHTML="🎉 تم توليد "+generated.length+" بطاقة بنجاح!<br><br>"+generated.join(" • ");
+showMessage("تم الحفظ بنجاح.","success");
+}catch(e){console.error(e);showMessage("Firebase Error: "+e.message,"error");}
+button.disabled=false;button.textContent="🎫 توليد البطاقات";
+};
+
+document.getElementById("loadQR").onclick=async()=>{
+const button=document.getElementById("loadQR"), qrResult=document.getElementById("qrResult");
+button.disabled=true;button.textContent="جاري تحميل البطاقات...";
+qrResult.innerHTML="";
+try{
+const cards=await getCards();
+if(!cards.length){showMessage("ما كايناش حتى بطاقة.","error");return;}
+cards.forEach(cardId=>{
+const box=document.createElement("div");box.className="qr-card";
+const qr=document.createElement("div");
+const id=document.createElement("div");id.className="qr-id";id.textContent=cardId;
+const dl=document.createElement("button");dl.className="download";dl.textContent="⬇️ تحميل QR";
+box.append(qr,id,dl);qrResult.appendChild(box);
+new QRCode(qr,{text:BASE_URL+encodeURIComponent(cardId),width:160,height:160,correctLevel:QRCode.CorrectLevel.H});
+dl.onclick=()=>{
+const canvas=qr.querySelector("canvas");const a=document.createElement("a");
+a.href=canvas.toDataURL("image/png");a.download=cardId+".png";a.click();
+};
+});
+showMessage("تم توليد QR Codes لجميع البطاقات.","success");
+}catch(e){console.error(e);showMessage("Firebase Error: "+e.message,"error");}
+finally{button.disabled=false;button.textContent="📱 توليد QR Codes للبطاقات";}
+};
+
+async function imageToDataURL(url){
+const res=await fetch(url);const blob=await res.blob();
+return await new Promise((resolve,reject)=>{
+const reader=new FileReader();reader.onload=()=>resolve(reader.result);reader.onerror=reject;reader.readAsDataURL(blob);
+});
+}
+
+function canvasToDataURL(canvas){return canvas.toDataURL("image/png");}
+
+async function qrDataURL(text){
+const holder=document.createElement("div");
+holder.style.position="fixed";holder.style.left="-10000px";document.body.appendChild(holder);
+new QRCode(holder,{text,width:420,height:420,correctLevel:QRCode.CorrectLevel.H});
+await new Promise(r=>setTimeout(r,80));
+const canvas=holder.querySelector("canvas");const data=canvasToDataURL(canvas);
+holder.remove();return data;
+}
+
+document.getElementById("makePDF").onclick=async()=>{
+const button=document.getElementById("makePDF");
+button.disabled=true;button.textContent="جاري إنشاء PDF...";
+try{
+const cards=await getCards();
+if(!cards.length){showMessage("ما كايناش حتى بطاقة.","error");return;}
+
+const frontImg=await imageToDataURL("front.png");
+const backImg=await imageToDataURL("back.png");
+const {jsPDF}=window.jspdf;
+const pdf=new jsPDF({orientation:"landscape",unit:"mm",format:"a4",compress:true});
+
+const pageW=297,pageH=210;
+const cols=4,rows=2;
+const cellW=pageW/cols,cellH=pageH/rows;
+const margin=1.5;
+
+for(let start=0;start<cards.length;start+=8){
+const batch=cards.slice(start,start+8);
+if(start>0)pdf.addPage();
+
+for(let i=0;i<8;i++){
+if(!batch[i])continue;
+const col=i%4,row=Math.floor(i/4);
+pdf.addImage(frontImg,"PNG",col*cellW+margin,row*cellH+margin,cellW-2*margin,cellH-2*margin);
+}
+
+pdf.addPage();
+
+// For duplex landscape on short edge: reverse each row horizontally.
+for(let i=0;i<8;i++){
+if(!batch[i])continue;
+const sourceIndex=Math.floor(i/4)*4+(3-(i%4));
+const cardId=batch[sourceIndex];
+if(!cardId)continue;
+const col=i%4,row=Math.floor(i/4);
+const x=col*cellW+margin,y=row*cellH+margin;
+pdf.addImage(backImg,"PNG",x,y,cellW-2*margin,cellH-2*margin);
+
+const qr=await qrDataURL(BASE_URL+encodeURIComponent(cardId));
+const qrX=x+(cellW-2*margin)*0.253;
+const qrY=y+(cellH-2*margin)*0.354;
+const qrSize=(cellW-2*margin)*0.494;
+pdf.addImage(qr,"PNG",qrX,qrY,qrSize,qrSize);
+
+pdf.setFillColor(9,75,45);
+pdf.roundedRect(x+(cellW-2*margin)*0.285,y+(cellH-2*margin)*0.704,(cellW-2*margin)*0.43,(cellH-2*margin)*0.071,3,3,"F");
+pdf.setTextColor(255,255,255);
+pdf.setFont("helvetica","bold");
+pdf.setFontSize(10);
+pdf.text(cardId,x+(cellW-2*margin)*0.5,y+(cellH-2*margin)*0.754,{align:"center"});
+}
+}
+
+pdf.save("Pause-and-Plate-Chance-Cards-Recto-Verso.pdf");
+showMessage("تم إنشاء PDF بنجاح: 8 بطاقات في كل مجموعة Recto + Verso.","success");
+}catch(e){console.error(e);showMessage("PDF Error: "+e.message,"error");}
+finally{button.disabled=false;button.textContent="📄 تحميل PDF Recto + Verso";}
+};
+
+
+document.getElementById("makeNewPDF").onclick=async()=>{
+const button=document.getElementById("makeNewPDF");
+button.disabled=true;button.textContent="جاري إنشاء PDF للبطاقات الجديدة...";
+try{
+const snap=await getDocs(cardCollection());
+const cards=[];
+snap.forEach(s=>{
+const d=s.data();
+if(/^PP-\d+$/.test(s.id) && d.printed!==true) cards.push(s.id);
+});
+cards.sort((a,b)=>parseInt(a.slice(3))-parseInt(b.slice(3)));
+
+if(!cards.length){
+showMessage("ما كايناش بطاقات جديدة مازال ما تطبعوش.","error");
+return;
+}
+
+const frontImg=await imageToDataURL("front.png");
+const backImg=await imageToDataURL("back.png");
+const {jsPDF}=window.jspdf;
+const pdf=new jsPDF({orientation:"landscape",unit:"mm",format:"a4",compress:true});
+const pageW=297,pageH=210,cols=4,rows=2,cellW=pageW/cols,cellH=pageH/rows,margin=1.5;
+
+for(let start=0;start<cards.length;start+=8){
+const batch=cards.slice(start,start+8);
+if(start>0)pdf.addPage();
+
+for(let i=0;i<8;i++){
+if(!batch[i])continue;
+const col=i%4,row=Math.floor(i/4);
+pdf.addImage(frontImg,"PNG",col*cellW+margin,row*cellH+margin,cellW-2*margin,cellH-2*margin);
+}
+
+pdf.addPage();
+
+for(let i=0;i<8;i++){
+const sourceIndex=Math.floor(i/4)*4+(3-(i%4));
+const cardId=batch[sourceIndex];
+if(!cardId)continue;
+const col=i%4,row=Math.floor(i/4);
+const x=col*cellW+margin,y=row*cellH+margin;
+pdf.addImage(backImg,"PNG",x,y,cellW-2*margin,cellH-2*margin);
+
+const qr=await qrDataURL(BASE_URL+encodeURIComponent(cardId));
+const qrX=x+(cellW-2*margin)*0.253;
+const qrY=y+(cellH-2*margin)*0.354;
+const qrSize=(cellW-2*margin)*0.494;
+pdf.addImage(qr,"PNG",qrX,qrY,qrSize,qrSize);
+
+pdf.setFillColor(9,75,45);
+pdf.roundedRect(x+(cellW-2*margin)*0.285,y+(cellH-2*margin)*0.704,(cellW-2*margin)*0.43,(cellH-2*margin)*0.071,3,3,"F");
+pdf.setTextColor(255,255,255);
+pdf.setFont("helvetica","bold");
+pdf.setFontSize(10);
+pdf.text(cardId,x+(cellW-2*margin)*0.5,y+(cellH-2*margin)*0.754,{align:"center"});
+}
+}
+
+pdf.save("Pause-and-Plate-New-Cards-Recto-Verso.pdf");
+
+for(const cardId of cards){
+await setDoc(cardDoc(cardId),{printed:true,printedAt:new Date()},{merge:true});
+}
+
+showMessage("تم إنشاء PDF للبطاقات الجديدة فقط وتم تعليمها كمطبوعة ✅","success");
+}catch(e){
+console.error(e);
+showMessage("PDF Error: "+e.message,"error");
+}finally{
+button.disabled=false;
+button.textContent="🆕 PDF ديال البطاقات الجديدة فقط";
+}
+};
+
+document.getElementById("logout").onclick=()=>signOut(auth);
+</script>
+</body>
+</html>
