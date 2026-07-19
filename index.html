@@ -96,5 +96,20 @@ document.getElementById("code").textContent=makeCode();document.getElementById("
 requestAnimationFrame(anim);
 };
 </script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+const firebaseConfig = {
+apiKey: "AIzaSyCHON3xqMq-Ob-ul1WWB1lY8Qw2UAdUvX8",
+authDomain: "pause-and-plate-chance-card.firebaseapp.com",
+projectId: "pause-and-plate-chance-card",
+storageBucket: "pause-and-plate-chance-card.firebasestorage.app",
+messagingSenderId: "593151678023",
+appId: "1:593151678023:web:71336ac1cb40a51800c362"
+};
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+console.log("Firebase connected");
+</script>
 </body>
 </html>
