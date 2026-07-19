@@ -84,7 +84,7 @@ ctx.fillStyle="#fff";ctx.textAlign="center";ctx.font="bold 24px Georgia";ctx.fil
 function weightedPick(){let x=Math.random()*100,s=0;for(const p of prizes){s+=p.pct;if(x<=s)return p}return prizes[0]}
 function makeCode(){const c="ABCDEFGHJKLMNPQRSTUVWXYZ23456789";let s="PP-";for(let i=0;i<8;i++)s+=c[Math.floor(Math.random()*c.length)];return s}
 draw();
-document.getElementById("spin").onclick=()=>{
+document.getElementById("spin").onclick=async()=>{
 if(spinning)return;spinning=true;document.getElementById("spin").disabled=true;
 const winner=weightedPick(),idx=prizes.indexOf(winner),target=(idx+.5)*visualArc;
 const finalRotation=angle+Math.PI*2*(5+Math.floor(Math.random()*3))+(Math.PI*2-target),start=angle,duration=4500,t0=performance.now();
@@ -98,7 +98,7 @@ requestAnimationFrame(anim);
 </script>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getFirestore, doc, getDoc, runTransaction, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 const firebaseConfig = {
 apiKey: "AIzaSyCHON3xqMq-Ob-ul1WWB1lY8Qw2UAdUvX8",
 authDomain: "pause-and-plate-chance-card.firebaseapp.com",
