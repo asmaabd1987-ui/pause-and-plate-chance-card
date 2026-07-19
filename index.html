@@ -108,11 +108,37 @@ return;
 }
 const winner=weightedPick(),idx=prizes.indexOf(winner),target=(idx+.5)*visualArc;
 const finalRotation=angle+Math.PI*2*(5+Math.floor(Math.random()*3))+(Math.PI*2-target),start=angle,duration=4500,t0=performance.now();
-function anim(t){const k=Math.min(1,(t-t0)/duration),ease=1-Math.pow(1-k,4);angle=start+(finalRotation-start)*ease;draw();
-if(k<1)requestAnimationFrame(anim);else{
+function anim(t){
+const k=Math.min(1,(t-t0)/duration),ease=1-Math.pow(1-k,4);
+angle=start+(finalRotation-start)*ease;
+draw();
+if(k<1){
+requestAnimationFrame(anim);
+}else{
+const rewardCode=makeCode();
 document.getElementById("prize").innerHTML="<strong>"+winner.ar+"<br><span dir='ltr'>"+winner.name+"</span></strong>";
-document.getElementById("code").textContent=makeCode();document.getElementById("result").style.display="block";
-}}
+document.getElementById("code").textContent=rewardCode;
+document.getElementById("result").style.display="block";
+runTransaction(db,async transaction=>{
+const fresh=await transaction.get(cardRef);
+if(!fresh.exists() || fresh.data().status==="used"){
+throw new Error("USED");
+}
+transaction.update(cardRef,{
+status:"used",
+prize:winner.name,
+rewardCode:rewardCode,
+usedAt:serverTimestamp()
+});
+});
+addDoc(collection(db,"spins"),{
+cardId:cardId,
+prize:winner.name,
+rewardCode:rewardCode,
+createdAt:serverTimestamp()
+});
+}
+}
 requestAnimationFrame(anim);
 };
 </script>
