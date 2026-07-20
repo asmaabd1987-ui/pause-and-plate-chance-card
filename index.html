@@ -113,13 +113,19 @@ opacity:.55;
 cursor:not-allowed;
 }
 
+.note{
+text-align:center;
+font-size:12px;
+color:#69736a;
+margin-top:14px;
+line-height:1.7;
+}
+
 /* =========================
    POPUP
 ========================= */
 
 .popup-overlay{
-
-display:none;
 
 position:fixed;
 
@@ -128,58 +134,88 @@ inset:0;
 z-index:9999;
 
 background:
+
 rgba(0,0,0,.72);
 
-backdrop-filter:
-blur(7px);
+backdrop-filter:blur(8px);
 
-padding:18px;
+display:flex;
 
 align-items:center;
 
 justify-content:center;
 
+padding:18px;
+
+opacity:0;
+
+visibility:hidden;
+
+transition:
+
+opacity .35s ease,
+
+visibility .35s ease;
+
 }
 
 .popup-overlay.show{
 
-display:flex;
+opacity:1;
 
-animation:
-overlayAppear .35s ease both;
+visibility:visible;
 
 }
 
 .popup{
 
-position:relative;
-
 width:100%;
 
-max-width:520px;
+max-width:560px;
 
-max-height:92vh;
+max-height:calc(100vh - 36px);
 
 overflow-y:auto;
 
 background:
+
 linear-gradient(
+
 145deg,
+
 #fffdf8 0%,
-#f8f1df 100%
+
+#f7f0df 100%
+
 );
 
-border-radius:28px;
+border-radius:30px;
 
-padding:30px 22px 24px;
-
-text-align:center;
+padding:28px 20px 24px;
 
 box-shadow:
+
 0 25px 80px #00000055;
 
-animation:
-popupAppear .45s cubic-bezier(.17,.67,.35,1.3) both;
+position:relative;
+
+transform:scale(.82) translateY(25px);
+
+opacity:0;
+
+transition:
+
+transform .45s cubic-bezier(.17,.67,.3,1.3),
+
+opacity .35s ease;
+
+}
+
+.popup-overlay.show .popup{
+
+transform:scale(1) translateY(0);
+
+opacity:1;
 
 }
 
@@ -187,69 +223,95 @@ popupAppear .45s cubic-bezier(.17,.67,.35,1.3) both;
 
 position:absolute;
 
-top:12px;
+top:13px;
 
-left:14px;
+left:13px;
 
-width:42px;
+width:48px;
 
-height:42px;
-
-margin:0;
+height:48px;
 
 padding:0;
 
+margin:0;
+
 border-radius:50%;
 
-background:#094B2D;
+background:var(--green);
 
 color:white;
 
-font-size:24px;
+font-size:28px;
 
-line-height:42px;
+line-height:48px;
+
+box-shadow:0 5px 15px #0003;
+
+z-index:5;
 
 }
 
-.popup-title{
+.close-popup:hover{
 
-font-size:28px;
+transform:rotate(90deg);
 
-font-weight:900;
+}
 
-color:var(--green);
+/* Popup Result */
+
+.popup-result{
+
+text-align:center;
+
+}
+
+.popup-result h2{
+
+margin:25px 0 10px;
+
+font-size:30px;
 
 line-height:1.5;
 
-margin:12px 35px 8px;
+color:var(--green);
 
 }
 
 .popup-message{
 
-font-size:16px;
-
-color:#59655b;
+font-size:18px;
 
 line-height:1.8;
 
+color:#59635b;
+
+margin-bottom:18px;
+
 }
+
+/* Prize */
 
 .prize-box{
 
 background:white;
 
-border-radius:20px;
+border:2px solid #e3d5ae;
 
-padding:20px 14px;
+border-radius:22px;
 
-margin:20px 0 14px;
+padding:20px 15px;
+
+margin:18px 0;
+
+font-size:21px;
+
+font-weight:bold;
+
+line-height:1.8;
 
 box-shadow:
-0 6px 18px #00000012;
 
-border:
-2px solid #e6d9b7;
+0 8px 20px #00000012;
 
 }
 
@@ -257,33 +319,21 @@ border:
 
 font-size:16px;
 
-color:#667065;
+font-weight:normal;
 
-margin-bottom:8px;
+color:#69736a;
+
+margin-bottom:7px;
 
 }
 
-.prize{
-
-font-size:23px;
-
-font-weight:900;
-
-line-height:1.8;
+#prize{
 
 color:var(--green);
 
 }
 
-.reward-code-label{
-
-font-size:14px;
-
-color:#667065;
-
-margin-top:12px;
-
-}
+/* Code */
 
 .code{
 
@@ -293,56 +343,71 @@ background:var(--green);
 
 color:white;
 
-padding:13px 22px;
+padding:14px 22px;
 
-border-radius:12px;
+border-radius:13px;
 
-font-weight:900;
-
-font-size:21px;
+font-weight:800;
 
 letter-spacing:3px;
 
-margin:8px 0 12px;
+font-size:21px;
 
-direction:ltr;
+margin:10px 0;
 
 box-shadow:
-0 5px 0 #063820;
+
+0 6px 0 #06351f,
+
+0 10px 20px #0003;
+
+direction:ltr;
 
 }
 
 .code-instruction{
 
-font-size:13px;
+font-size:15px;
 
-color:#667065;
+color:#69736a;
 
 line-height:1.8;
 
+margin:6px 0 20px;
+
 }
+
+/* =========================
+   GOOGLE REVIEW CARD
+========================= */
 
 .review-card{
 
-margin-top:22px;
+margin-top:20px;
 
 background:
+
 linear-gradient(
+
 145deg,
+
 #fffdf8 0%,
+
 #f8f1df 100%
+
 );
 
-border:1px solid #e6d9b7;
+border:2px solid #e6d9b7;
 
-border-radius:22px;
+border-radius:24px;
 
-padding:22px 18px;
+padding:24px 17px 20px;
 
 color:var(--green);
 
 box-shadow:
-0 8px 22px #00000016;
+
+0 10px 28px #00000018;
 
 position:relative;
 
@@ -356,17 +421,17 @@ content:"";
 
 position:absolute;
 
-top:-45px;
+top:-55px;
 
 left:-45px;
 
-width:120px;
+width:145px;
 
-height:120px;
+height:145px;
 
 border-radius:50%;
 
-background:#D9A51E18;
+background:#D9A51E20;
 
 }
 
@@ -376,17 +441,17 @@ content:"";
 
 position:absolute;
 
-bottom:-55px;
+bottom:-65px;
 
-right:-45px;
+right:-50px;
 
-width:150px;
+width:170px;
 
-height:150px;
+height:170px;
 
 border-radius:50%;
 
-background:#094B2D0D;
+background:#094B2D10;
 
 }
 
@@ -400,23 +465,21 @@ display:inline-flex;
 
 align-items:center;
 
-gap:8px;
+gap:9px;
 
-background:#fff;
+background:white;
 
-padding:7px 14px;
+padding:8px 16px;
 
 border-radius:999px;
 
-font-size:13px;
+font-size:14px;
 
 font-weight:bold;
 
 color:#4b554d;
 
-box-shadow:0 3px 10px #00000012;
-
-margin-bottom:14px;
+box-shadow:0 4px 12px #00000015;
 
 direction:ltr;
 
@@ -424,7 +487,7 @@ direction:ltr;
 
 .google-icon{
 
-font-size:19px;
+font-size:22px;
 
 font-weight:900;
 
@@ -436,13 +499,13 @@ position:relative;
 
 z-index:1;
 
-font-size:21px;
+font-size:22px;
 
-font-weight:900;
+font-weight:800;
 
-line-height:1.7;
+line-height:1.65;
 
-margin-bottom:7px;
+margin-top:17px;
 
 }
 
@@ -464,6 +527,8 @@ color:#536157;
 
 direction:ltr;
 
+margin-top:8px;
+
 }
 
 .review-text{
@@ -474,13 +539,17 @@ z-index:1;
 
 margin-top:14px;
 
-font-size:15px;
+font-size:14px;
 
 line-height:1.8;
 
 color:#667065;
 
 }
+
+/* =========================
+   GOOGLE BUTTON EFFECT
+========================= */
 
 .review{
 
@@ -494,19 +563,31 @@ align-items:center;
 
 justify-content:center;
 
-gap:8px;
+gap:9px;
 
 width:100%;
 
 margin-top:20px;
 
-background:var(--gold);
+background:
+
+linear-gradient(
+
+135deg,
+
+#f0c63c,
+
+#D9A51E,
+
+#e6b72c
+
+);
 
 color:#17351f;
 
 text-decoration:none;
 
-padding:16px 14px;
+padding:17px 15px;
 
 border-radius:999px;
 
@@ -516,15 +597,77 @@ font-size:17px;
 
 box-shadow:
 
-0 5px 0 #ae8214,
+0 6px 0 #ae8214,
 
-0 8px 18px #0000001c;
+0 10px 25px #00000028;
 
-transition:
+overflow:hidden;
 
-transform .18s ease,
+animation:
 
-box-shadow .18s ease;
+reviewPulse 2s infinite;
+
+}
+
+.review::before{
+
+content:"";
+
+position:absolute;
+
+top:0;
+
+left:-120%;
+
+width:70%;
+
+height:100%;
+
+background:
+
+linear-gradient(
+
+90deg,
+
+transparent,
+
+rgba(255,255,255,.75),
+
+transparent
+
+);
+
+transform:skewX(-25deg);
+
+animation:
+
+shine 2.8s infinite;
+
+}
+
+.review::after{
+
+content:"⭐";
+
+position:absolute;
+
+right:16px;
+
+font-size:18px;
+
+animation:starBounce 1.4s infinite;
+
+}
+
+.review:hover{
+
+transform:translateY(-3px) scale(1.02);
+
+box-shadow:
+
+0 9px 0 #ae8214,
+
+0 15px 30px #00000035;
 
 }
 
@@ -534,85 +677,163 @@ transform:translateY(3px);
 
 box-shadow:
 
-0 2px 0 #ae8214;
+0 3px 0 #ae8214,
+
+0 6px 12px #00000020;
 
 }
 
-.popup-note{
+@keyframes reviewPulse{
 
-margin-top:15px;
+0%,100%{
 
-font-size:12px;
+box-shadow:
 
-color:#69736a;
+0 6px 0 #ae8214,
 
-line-height:1.7;
-
-}
-
-.invalid-popup{
-
-border-top:7px solid #9b2020;
+0 10px 25px #00000028;
 
 }
 
-.used-popup{
+50%{
 
-border-top:7px solid #8a6110;
+box-shadow:
 
-}
+0 6px 0 #ae8214,
 
-.success-popup{
+0 10px 25px #00000028,
 
-border-top:7px solid var(--green);
-
-}
-
-@keyframes overlayAppear{
-
-from{
-
-opacity:0;
-
-}
-
-to{
-
-opacity:1;
+0 0 0 8px #D9A51E20;
 
 }
 
 }
 
-@keyframes popupAppear{
+@keyframes shine{
 
-from{
+0%{
 
-opacity:0;
-
-transform:translateY(35px) scale(.88);
+left:-120%;
 
 }
 
-to{
+45%,100%{
 
-opacity:1;
-
-transform:translateY(0) scale(1);
+left:140%;
 
 }
 
 }
 
-.message{
+@keyframes starBounce{
 
-text-align:center;
+0%,100%{
 
-font-weight:bold;
+transform:scale(1) rotate(0deg);
 
-margin-top:15px;
+}
 
-line-height:1.8;
+50%{
+
+transform:scale(1.3) rotate(15deg);
+
+}
+
+}
+
+/* Used / Invalid */
+
+.popup.used h2{
+
+color:#8a6110;
+
+}
+
+.popup.invalid h2{
+
+color:#9b2020;
+
+}
+
+.popup.success h2{
+
+color:var(--green);
+
+}
+
+/* Mobile */
+
+@media(max-width:500px){
+
+.popup{
+
+padding:25px 15px 20px;
+
+border-radius:25px;
+
+}
+
+.popup-result h2{
+
+font-size:25px;
+
+}
+
+.popup-message{
+
+font-size:16px;
+
+}
+
+.prize-box{
+
+font-size:19px;
+
+}
+
+.review-title{
+
+font-size:20px;
+
+}
+
+.review{
+
+font-size:16px;
+
+padding:16px 10px;
+
+}
+
+}
+
+/* Popup entrance */
+
+@keyframes popupGlow{
+
+0%,100%{
+
+box-shadow:
+
+0 25px 80px #00000055;
+
+}
+
+50%{
+
+box-shadow:
+
+0 25px 80px #00000055,
+
+0 0 35px #D9A51E35;
+
+}
+
+}
+
+.popup.success{
+
+animation:popupGlow 2.5s infinite;
 
 }
 
@@ -627,11 +848,15 @@ line-height:1.8;
 <div class="card">
 
 <div class="brand">
+
 PAUSE <span>&amp;</span> PLATE
+
 </div>
 
 <h1>
+
 🎁 بطاقة الحظ | CHANCE CARD
+
 </h1>
 
 <div class="sub">
@@ -639,7 +864,9 @@ PAUSE <span>&amp;</span> PLATE
 دُر العجلة واكتشف جائزتك!<br>
 
 <span dir="ltr">
+
 Tournez la roue et découvrez votre récompense !
+
 </span>
 
 </div>
@@ -649,20 +876,37 @@ Tournez la roue et découvrez votre récompense !
 <div class="pointer"></div>
 
 <canvas
+
 id="wheel"
+
 width="700"
+
 height="700">
+
 </canvas>
 
 </div>
 
 <button id="spin">
+
 🎡 دُر العجلة | SPIN THE WHEEL
+
 </button>
 
-<div
-id="message"
-class="message">
+<div class="note">
+
+دورة واحدة لكل بطاقة • استعمال واحد فقط<br>
+
+<span dir="ltr">
+
+Un seul spin par carte • Une seule utilisation
+
+</span>
+
+<br>
+
+احتمالات الفوز قد تختلف حسب الجائزة.
+
 </div>
 
 </div>
@@ -675,36 +919,53 @@ class="message">
 ========================= -->
 
 <div
+
 id="popupOverlay"
-class="popup-overlay">
+
+class="popup-overlay"
+
+>
 
 <div
+
 id="popup"
-class="popup success-popup">
+
+class="popup"
+
+>
 
 <button
+
 id="closePopup"
-class="close-popup">
+
+class="close-popup"
+
+>
 
 ×
-
 </button>
 
-<div
-id="popupTitle"
-class="popup-title">
+<div class="popup-result">
 
-</div>
+<h2 id="resultTitle"></h2>
 
 <div
-id="popupMessage"
+
+id="resultMessage"
+
 class="popup-message">
 
 </div>
 
 <div
+
 id="prizeBox"
-class="prize-box">
+
+class="prize-box"
+
+style="display:none"
+
+>
 
 <div class="prize-label">
 
@@ -712,31 +973,31 @@ class="prize-box">
 
 </div>
 
-<div
-id="prize"
-class="prize">
-
-</div>
+<div id="prize"></div>
 
 </div>
 
 <div
-id="rewardCodeLabel"
-class="reward-code-label">
 
-كود الجائزة | Code de récompense
+class="code"
 
-</div>
-
-<div
 id="code"
-class="code">
+
+style="display:none"
+
+>
 
 </div>
 
 <div
+
 id="codeInstruction"
-class="code-instruction">
+
+class="code-instruction"
+
+style="display:none"
+
+>
 
 قدم هذا الكود لفريقنا للاستفادة من جائزتك.<br>
 
@@ -749,8 +1010,14 @@ Présentez ce code à notre équipe pour utiliser votre récompense.
 </div>
 
 <div
+
 id="reviewCard"
-class="review-card">
+
+class="review-card"
+
+style="display:none"
+
+>
 
 <div class="google-badge">
 
@@ -783,28 +1050,24 @@ votre avis en est le titre ✨
 </div>
 
 <a
+
+id="review"
+
 class="review"
+
 href="https://g.page/r/CZV_cSYvHWLMECA/review"
+
 target="_blank"
-rel="noopener">
+
+rel="noopener"
+
+>
 
 ⭐ شارك رأيك معنا على Google Reviews
 
 </a>
 
 </div>
-
-<div
-id="popupNote"
-class="popup-note">
-
-دورة واحدة لكل بطاقة • استعمال واحد فقط<br>
-
-<span dir="ltr">
-
-Un seul spin par carte • Une seule utilisation
-
-</span>
 
 </div>
 
@@ -815,7 +1078,7 @@ Un seul spin par carte • Une seule utilisation
 
 <script type="module">
 
-import {
+import{
 
 initializeApp
 
@@ -826,7 +1089,7 @@ from
 "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
 
-import {
+import{
 
 getFirestore,
 
@@ -851,31 +1114,27 @@ from
 
 const firebaseConfig={
 
-apiKey:
-"AIzaSyCHON3xqMq-Ob-ul1WWB1lY8Qw2UAdUvX8",
+apiKey:"AIzaSyCHON3xqMq-Ob-ul1WWB1lY8Qw2UAdUvX8",
 
-authDomain:
-"pause-and-plate-chance-card.firebaseapp.com",
+authDomain:"pause-and-plate-chance-card.firebaseapp.com",
 
-projectId:
-"pause-and-plate-chance-card",
+projectId:"pause-and-plate-chance-card",
 
-storageBucket:
-"pause-and-plate-chance-card.firebasestorage.app",
+storageBucket:"pause-and-plate-chance-card.firebasestorage.app",
 
-messagingSenderId:
-"593151678023",
+messagingSenderId:"593151678023",
 
-appId:
-"1:593151678023:web:71336ac1cb40a51800c362"
+appId:"1:593151678023:web:71336ac1cb40a51800c362"
 
 };
 
 
 const app=
+
 initializeApp(firebaseConfig);
 
 const db=
+
 getFirestore(app);
 
 
@@ -957,9 +1216,11 @@ color:"#C8D0B8"
 
 
 const canvas=
+
 document.getElementById("wheel");
 
 const ctx=
+
 canvas.getContext("2d");
 
 const cx=350;
@@ -969,6 +1230,7 @@ const cy=350;
 const r=320;
 
 const visualArc=
+
 2*Math.PI/prizes.length;
 
 let angle=0;
@@ -978,29 +1240,20 @@ let spinning=false;
 
 function draw(){
 
-ctx.clearRect(
-0,
-0,
-700,
-700
-);
+ctx.clearRect(0,0,700,700);
 
 let start=
+
 angle-Math.PI/2;
 
 
 prizes.forEach(p=>{
 
-const arc=
-visualArc;
-
+const arc=visualArc;
 
 ctx.beginPath();
 
-ctx.moveTo(
-cx,
-cy
-);
+ctx.moveTo(cx,cy);
 
 ctx.arc(
 
@@ -1018,46 +1271,38 @@ start+arc
 
 ctx.closePath();
 
-ctx.fillStyle=
-p.color;
+ctx.fillStyle=p.color;
 
 ctx.fill();
 
-ctx.strokeStyle=
-"#fff";
+ctx.strokeStyle="#fff";
 
 ctx.lineWidth=5;
 
 ctx.stroke();
 
-
 ctx.save();
 
-ctx.translate(
-cx,
-cy
-);
+ctx.translate(cx,cy);
 
-ctx.rotate(
-start+arc/2
-);
+ctx.rotate(start+arc/2);
 
-ctx.textAlign=
-"right";
+ctx.textAlign="right";
 
-ctx.fillStyle=
-"#17351f";
+ctx.fillStyle="#17351f";
 
-ctx.font=
-"bold 19px Arial";
-
+ctx.font="bold 19px Arial";
 
 ctx.fillText(
 
 p.name.length>22
+
 ?
+
 "-10% prochaine visite"
+
 :
+
 p.name,
 
 285,
@@ -1066,10 +1311,7 @@ p.name,
 
 );
 
-
-ctx.font=
-"bold 18px Arial";
-
+ctx.font="bold 18px Arial";
 
 ctx.fillText(
 
@@ -1080,7 +1322,6 @@ p.ar,
 18
 
 );
-
 
 ctx.restore();
 
@@ -1105,58 +1346,40 @@ cy,
 
 );
 
-ctx.fillStyle=
-"#094B2D";
+ctx.fillStyle="#094B2D";
 
 ctx.fill();
 
-ctx.strokeStyle=
-"#D9A51E";
+ctx.strokeStyle="#D9A51E";
 
 ctx.lineWidth=7;
 
 ctx.stroke();
 
-ctx.fillStyle=
-"#fff";
+ctx.fillStyle="#fff";
 
-ctx.textAlign=
-"center";
+ctx.textAlign="center";
 
-ctx.font=
-"bold 24px Georgia";
+ctx.font="bold 24px Georgia";
 
-ctx.fillText(
-"PAUSE",
-cx,
-cy-5
-);
+ctx.fillText("PAUSE",cx,cy-5);
 
-ctx.fillText(
-"& PLATE",
-cx,
-cy+25
-);
+ctx.fillText("& PLATE",cx,cy+25);
 
 }
 
 
 function weightedPick(){
 
-let x=
-Math.random()*100;
+let x=Math.random()*100;
 
 let s=0;
 
-
-for(
-const p of prizes
-){
+for(const p of prizes){
 
 s+=p.pct;
 
-if(x<=s)
-return p;
+if(x<=s)return p;
 
 }
 
@@ -1167,29 +1390,13 @@ return prizes[0];
 
 function makeCode(){
 
-const chars=
-"ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+const chars="ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
 
-let code=
-"PP-";
+let code="PP-";
 
+for(let i=0;i<8;i++){
 
-for(
-let i=0;
-
-i<8;
-
-i++
-
-){
-
-code+=
-chars[
-Math.floor(
-Math.random()*
-chars.length
-)
-];
+code+=chars[Math.floor(Math.random()*chars.length)];
 
 }
 
@@ -1198,7 +1405,7 @@ return code;
 }
 
 
-function showPopup(
+function openPopup(
 
 type,
 
@@ -1213,131 +1420,96 @@ codeValue=null
 ){
 
 const overlay=
-document.getElementById(
-"popupOverlay"
-);
+
+document.getElementById("popupOverlay");
 
 const popup=
-document.getElementById(
-"popup"
-);
 
-const popupTitle=
-document.getElementById(
-"popupTitle"
-);
+document.getElementById("popup");
 
-const popupMessage=
-document.getElementById(
-"popupMessage"
-);
+const resultTitle=
+
+document.getElementById("resultTitle");
+
+const resultMessage=
+
+document.getElementById("resultMessage");
 
 const prizeBox=
-document.getElementById(
-"prizeBox"
-);
+
+document.getElementById("prizeBox");
 
 const prize=
-document.getElementById(
-"prize"
-);
+
+document.getElementById("prize");
 
 const code=
-document.getElementById(
-"code"
-);
 
-const codeInstruction=
-document.getElementById(
-"codeInstruction"
-);
+document.getElementById("code");
+
+const instruction=
+
+document.getElementById("codeInstruction");
 
 const reviewCard=
-document.getElementById(
-"reviewCard"
-);
 
-const rewardCodeLabel=
-document.getElementById(
-"rewardCodeLabel"
-);
+document.getElementById("reviewCard");
+
 
 popup.className=
-"popup "+
-type+"-popup";
 
-popupTitle.innerHTML=
-title;
+"popup "+type;
 
-popupMessage.innerHTML=
-messageText;
+
+resultTitle.innerHTML=title;
+
+resultMessage.innerHTML=messageText;
+
+
+prizeBox.style.display="none";
+
+code.style.display="none";
+
+instruction.style.display="none";
+
+reviewCard.style.display="none";
 
 
 if(prizeData){
 
-prizeBox.style.display=
-"block";
+prizeBox.style.display="block";
 
 prize.innerHTML=
 
 "<strong>"+
 
-(prizeData.ar || "")+
+(prizeData.ar||"")+
 
 "<br><span dir='ltr'>"+
 
-(prizeData.name || "")+
+(prizeData.name||"")+
 
 "</span></strong>";
-
-}else{
-
-prizeBox.style.display=
-"none";
 
 }
 
 
 if(codeValue){
 
-code.style.display=
-"inline-block";
+code.style.display="inline-block";
 
-rewardCodeLabel.style.display=
-"block";
+code.textContent=codeValue;
 
-code.textContent=
-codeValue;
+instruction.style.display="block";
 
-codeInstruction.style.display=
-"block";
-
-reviewCard.style.display=
-"block";
-
-}else{
-
-code.style.display=
-"none";
-
-rewardCodeLabel.style.display=
-"none";
-
-codeInstruction.style.display=
-"none";
-
-reviewCard.style.display=
-"none";
+reviewCard.style.display="block";
 
 }
 
 
-overlay.classList.add(
-"show"
-);
+overlay.classList.add("show");
 
-document.body.style.overflow=
-"hidden";
+document.body.style.overflow="hidden";
 
 }
 
@@ -1345,38 +1517,32 @@ document.body.style.overflow=
 function closePopup(){
 
 document
-.getElementById(
-"popupOverlay"
-)
-.classList.remove(
-"show"
-);
 
-document.body.style.overflow=
-"";
+.getElementById("popupOverlay")
+
+.classList.remove("show");
+
+document.body.style.overflow="";
 
 }
 
 
 document
-.getElementById(
-"closePopup"
-)
-.onclick=
-closePopup;
+
+.getElementById("closePopup")
+
+.onclick=closePopup;
 
 
 document
-.getElementById(
-"popupOverlay"
-)
-.onclick=
-event=>{
 
-if(
-event.target.id===
-"popupOverlay"
-){
+.getElementById("popupOverlay")
+
+.onclick=
+
+e=>{
+
+if(e.target.id==="popupOverlay"){
 
 closePopup();
 
@@ -1385,66 +1551,40 @@ closePopup();
 };
 
 
-document.addEventListener(
-
-"keydown",
-
-event=>{
-
-if(
-event.key===
-"Escape"
-){
-
-closePopup();
-
-}
-
-}
-
-);
-
-
 draw();
 
 
 document
-.getElementById(
-"spin"
-)
+
+.getElementById("spin")
+
 .onclick=
+
 async()=>{
 
 
-if(
-spinning
-){
-
-return;
-
-}
+if(spinning)return;
 
 
 const cardId=
+
 new URLSearchParams(
+
 window.location.search
-)
-.get(
-"card"
-);
+
+).get("card");
 
 
-if(
-!cardId
-){
+if(!cardId){
 
-showPopup(
+openPopup(
 
 "invalid",
 
 "❌ بطاقة غير صالحة",
 
 "❌ هذه البطاقة غير صالحة<br>"+
+
 "<span dir='ltr'>Cette carte n'est pas valide</span>"
 
 );
@@ -1454,23 +1594,21 @@ return;
 }
 
 
-spinning=
-true;
+spinning=true;
 
 
 const spinButton=
-document.getElementById(
-"spin"
-);
 
-spinButton.disabled=
-true;
+document.getElementById("spin");
+
+spinButton.disabled=true;
 
 
 try{
 
 
 const cardRef=
+
 doc(
 
 db,
@@ -1487,31 +1625,27 @@ cardId
 
 
 const cardSnap=
-await getDoc(
-cardRef
-);
+
+await getDoc(cardRef);
 
 
-if(
-!cardSnap.exists()
-){
+if(!cardSnap.exists()){
 
-showPopup(
+openPopup(
 
 "invalid",
 
 "❌ بطاقة غير صالحة",
 
 "❌ هذه البطاقة غير صالحة<br>"+
+
 "<span dir='ltr'>Cette carte n'est pas valide</span>"
 
 );
 
-spinning=
-false;
+spinning=false;
 
-spinButton.disabled=
-false;
+spinButton.disabled=false;
 
 return;
 
@@ -1519,27 +1653,22 @@ return;
 
 
 const currentData=
+
 cardSnap.data();
 
 
-if(
-currentData.status!==
-"unused"
-){
+if(currentData.status!=="unused"){
 
 const existingPrize={
 
-name:
-currentData.prize || "",
+name:currentData.prize||"",
 
-ar:
-currentData.prizeArabic ||
-currentData.prize || ""
+ar:currentData.prizeArabic||currentData.prize||""
 
 };
 
 
-showPopup(
+openPopup(
 
 "used",
 
@@ -1549,15 +1678,13 @@ showPopup(
 
 existingPrize,
 
-currentData.rewardCode || null
+currentData.rewardCode||null
 
 );
 
-spinning=
-false;
+spinning=false;
 
-spinButton.disabled=
-false;
+spinButton.disabled=false;
 
 return;
 
@@ -1565,105 +1692,64 @@ return;
 
 
 const winner=
+
 weightedPick();
 
-
 const idx=
-prizes.indexOf(
-winner
-);
 
+prizes.indexOf(winner);
 
 const target=
-(idx+0.5)*
-visualArc;
+
+(idx+.5)*visualArc;
 
 
 const finalRotation=
 
 angle+
 
-Math.PI*2*
+Math.PI*2*(5+Math.floor(Math.random()*3))+
 
-(
-
-5+
-
-Math.floor(
-Math.random()*3
-)
-
-)+
-
-(
-
-Math.PI*2-
-
-target
-
-);
+(Math.PI*2-target);
 
 
-const start=
-angle;
+const start=angle;
 
+const duration=4500;
 
-const duration=
-4500;
-
-
-const t0=
-performance.now();
+const t0=performance.now();
 
 
 function anim(t){
 
 const k=
+
 Math.min(
 
 1,
 
-(t-t0)/
-duration
+(t-t0)/duration
 
 );
-
 
 const ease=
-1-
 
-Math.pow(
-
-1-k,
-
-4
-
-);
+1-Math.pow(1-k,4);
 
 
 angle=
+
 start+
 
-(
-
-finalRotation-
-start
-
-)*
-
-ease;
+(finalRotation-start)*ease;
 
 
 draw();
 
 
-if(
-k<1
-){
+if(k<1){
 
-requestAnimationFrame(
-anim
-);
+requestAnimationFrame(anim);
 
 }else{
 
@@ -1682,35 +1768,28 @@ winner
 }
 
 
-requestAnimationFrame(
-anim
-);
+requestAnimationFrame(anim);
 
 
 }catch(error){
 
-console.error(
-error
-);
+console.error(error);
 
-
-showPopup(
+openPopup(
 
 "invalid",
 
 "⚠️ خطأ في التحقق",
 
 "وقع خطأ أثناء التحقق من البطاقة.<br>"+
+
 "<span dir='ltr'>Une erreur est survenue lors de la vérification.</span>"
 
 );
 
+spinning=false;
 
-spinning=
-false;
-
-spinButton.disabled=
-false;
+spinButton.disabled=false;
 
 }
 
@@ -1728,6 +1807,7 @@ winner
 ){
 
 const rewardCode=
+
 makeCode();
 
 
@@ -1742,34 +1822,25 @@ async transaction=>{
 
 
 const fresh=
-await transaction.get(
-cardRef
-);
+
+await transaction.get(cardRef);
 
 
-if(
-!fresh.exists()
-){
+if(!fresh.exists()){
 
-throw new Error(
-"INVALID_CARD"
-);
+throw new Error("INVALID_CARD");
 
 }
 
 
 const freshData=
+
 fresh.data();
 
 
-if(
-freshData.status!==
-"unused"
-){
+if(freshData.status!=="unused"){
 
-throw new Error(
-"ALREADY_USED"
-);
+throw new Error("ALREADY_USED");
 
 }
 
@@ -1780,20 +1851,15 @@ cardRef,
 
 {
 
-status:
-"prize_won",
+status:"prize_won",
 
-prize:
-winner.name,
+prize:winner.name,
 
-prizeArabic:
-winner.ar,
+prizeArabic:winner.ar,
 
-rewardCode:
-rewardCode,
+rewardCode:rewardCode,
 
-wonAt:
-serverTimestamp()
+wonAt:serverTimestamp()
 
 }
 
@@ -1806,46 +1872,37 @@ serverTimestamp()
 
 await addDoc(
 
-collection(
-db,
-"spins"
-),
+collection(db,"spins"),
 
 {
 
-cardId:
-cardId,
+cardId:cardId,
 
-prize:
-winner.name,
+prize:winner.name,
 
-prizeArabic:
-winner.ar,
+prizeArabic:winner.ar,
 
-rewardCode:
-rewardCode,
+rewardCode:rewardCode,
 
-status:
-"prize_won",
+status:"prize_won",
 
-claimed:
-false,
+claimed:false,
 
-createdAt:
-serverTimestamp()
+createdAt:serverTimestamp()
 
 }
 
 );
 
 
-showPopup(
+openPopup(
 
 "success",
 
 "🎉 مبروك! | FÉLICITATIONS !",
 
 "تم تخصيص جائزتك بنجاح.<br>"+
+
 "<span dir='ltr'>Votre récompense a été attribuée avec succès.</span>",
 
 winner,
@@ -1855,33 +1912,26 @@ rewardCode
 );
 
 
-spinning=
-false;
+spinning=false;
 
 
 }catch(error){
 
-console.error(
-error
-);
+console.error(error);
 
 
-if(
-error.message===
-"ALREADY_USED"
-){
+if(error.message==="ALREADY_USED"){
 
 const fresh=
-await getDoc(
-cardRef
-);
 
+await getDoc(cardRef);
 
 const data=
+
 fresh.data();
 
 
-showPopup(
+openPopup(
 
 "used",
 
@@ -1891,44 +1941,39 @@ showPopup(
 
 {
 
-name:
-data.prize || "",
+name:data.prize||"",
 
-ar:
-data.prizeArabic ||
-data.prize || ""
+ar:data.prizeArabic||data.prize||""
 
 },
 
-data.rewardCode || null
+data.rewardCode||null
 
 );
 
 }else{
 
-showPopup(
+openPopup(
 
 "invalid",
 
 "⚠️ تعذر إتمام العملية",
 
 "تعذر إتمام العملية.<br>"+
+
 "<span dir='ltr'>Impossible de terminer l'opération.</span>"
 
 );
 
 }
 
-
-spinning=
-false;
+spinning=false;
 
 document
-.getElementById(
-"spin"
-)
-.disabled=
-false;
+
+.getElementById("spin")
+
+.disabled=false;
 
 }
 
@@ -1938,4 +1983,4 @@ false;
 
 </body>
 
-  </html>
+</html>
