@@ -1,7 +1,10 @@
 <!doctype html>
 <html lang="ar" dir="rtl">
+
 <head>
+
 <meta charset="utf-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <title>Pause & Plate — Staff</title>
@@ -20,239 +23,460 @@ box-sizing:border-box;
 }
 
 body{
+
 margin:0;
-background:var(--cream);
+
+min-height:100vh;
+
+background:
+
+radial-gradient(
+circle at top,
+#ffffff 0%,
+var(--cream) 55%,
+#e9e0ce 100%
+);
+
 color:var(--ink);
-font-family:Arial,"Noto Sans Arabic",sans-serif;
+
+font-family:
+Arial,
+"Noto Sans Arabic",
+sans-serif;
+
 }
 
 .wrap{
-max-width:620px;
+
+max-width:650px;
+
 margin:auto;
+
 padding:22px;
+
 }
 
 .card{
+
 background:#fffdf8;
-border-radius:28px;
-padding:28px;
-box-shadow:0 14px 40px #00000018;
+
+border-radius:30px;
+
+padding:30px 24px;
+
+box-shadow:
+0 18px 50px #00000020;
+
 }
 
 .brand{
+
 text-align:center;
+
 color:var(--green);
+
 font-family:Georgia,serif;
+
 font-size:30px;
+
 font-weight:700;
+
 direction:ltr;
+
+margin-bottom:12px;
+
 }
 
 .brand span{
+
 color:var(--gold);
+
 }
 
 h1{
+
 text-align:center;
+
 color:var(--green);
-margin:18px 0 8px;
+
+margin:12px 0 8px;
+
+font-size:28px;
+
 }
 
-.sub{
+.subtitle{
+
 text-align:center;
-color:#667065;
+
+color:#69736a;
+
 line-height:1.8;
+
 margin-bottom:25px;
+
 }
 
 label{
+
 display:block;
+
 font-weight:bold;
+
 margin-bottom:8px;
+
 }
 
 input{
+
 width:100%;
+
 padding:17px;
-border:1px solid #ddd;
+
+border:
+
+1px solid #d7ddd4;
+
 border-radius:14px;
+
 font-size:20px;
+
 text-align:center;
-letter-spacing:2px;
+
 direction:ltr;
-text-transform:uppercase;
+
+letter-spacing:2px;
+
+outline:none;
+
+}
+
+input:focus{
+
+border-color:var(--green);
+
+box-shadow:
+
+0 0 0 3px #094b2d18;
+
 }
 
 button{
+
 width:100%;
-margin-top:18px;
-padding:16px;
+
 border:0;
+
 border-radius:999px;
+
+padding:16px;
+
+margin-top:16px;
+
 background:var(--green);
+
 color:white;
+
 font-size:18px;
+
 font-weight:bold;
+
 cursor:pointer;
+
 }
 
 button:disabled{
+
 opacity:.55;
+
+cursor:not-allowed;
+
 }
 
-.result{
+#result{
+
 display:none;
+
 margin-top:25px;
-padding:25px;
+
+padding:24px;
+
 border-radius:20px;
+
 text-align:center;
-background:var(--green);
-color:white;
-}
 
-.result h2{
-margin-top:0;
-color:white;
-}
-
-.prize{
-font-size:24px;
-font-weight:bold;
-margin:18px 0;
-line-height:1.7;
-}
-
-.code{
-display:inline-block;
-background:white;
-color:var(--green);
-padding:13px 22px;
-border-radius:12px;
-font-size:22px;
-font-weight:bold;
-letter-spacing:3px;
-direction:ltr;
-}
-
-.status{
-margin-top:20px;
-padding:14px;
-border-radius:12px;
-font-weight:bold;
 }
 
 .valid{
-background:#dff2df;
-color:#176b2c;
+
+background:#eef6ec;
+
+border:2px solid #a8c6a3;
+
 }
 
-.used{
-background:#ffe1e1;
-color:#a00000;
+.already{
+
+background:#fff4df;
+
+border:2px solid #e1b95b;
+
 }
 
-.error{
-margin-top:20px;
-padding:15px;
-border-radius:12px;
-background:#ffe1e1;
-color:#a00000;
-text-align:center;
+.invalid{
+
+background:#fff0f0;
+
+border:2px solid #d99b9b;
+
+}
+
+.status{
+
+font-size:24px;
+
 font-weight:bold;
+
+margin-bottom:15px;
+
 }
 
-.note{
-margin-top:22px;
-text-align:center;
-font-size:13px;
-color:#69736a;
+.prize{
+
+background:white;
+
+border-radius:16px;
+
+padding:18px;
+
+margin:16px 0;
+
+font-size:22px;
+
+font-weight:bold;
+
+color:var(--green);
+
 line-height:1.8;
+
+}
+
+.reward-code{
+
+font-family:monospace;
+
+font-size:20px;
+
+font-weight:bold;
+
+letter-spacing:3px;
+
+direction:ltr;
+
+color:var(--green);
+
+}
+
+.confirm{
+
+background:var(--gold);
+
+color:#17351f;
+
+margin-top:20px;
+
+}
+
+.small{
+
+font-size:13px;
+
+color:#69736a;
+
+line-height:1.7;
+
+margin-top:18px;
+
+}
+
+.success-message{
+
+color:var(--green);
+
+font-weight:bold;
+
+margin-top:15px;
+
+}
+
+.error-message{
+
+color:#b00020;
+
+font-weight:bold;
+
+margin-top:15px;
+
 }
 
 </style>
+
 </head>
 
+
 <body>
+
 
 <div class="wrap">
 
 <div class="card">
 
+
 <div class="brand">
+
 PAUSE <span>&amp;</span> PLATE
+
 </div>
 
-<h1>🎫 التحقق من الجائزة</h1>
 
-<div class="sub">
+<h1>
 
-أدخل رمز البطاقة للتحقق من الجائزة التي فاز بها الزبون.<br>
+🎁 التحقق من الجائزة
+
+</h1>
+
+
+<div class="subtitle">
+
+أدخل كود الجائزة للتحقق منها<br>
 
 <span dir="ltr">
-Entrez le code de la carte pour vérifier la récompense.
+
+Vérification de la récompense
+
 </span>
 
 </div>
+
 
 <label>
-🔐 رمز البطاقة | Code de la carte
+
+🔑 كود الجائزة
+
 </label>
 
+
 <input
-id="cardCode"
+
+id="rewardCode"
+
 type="text"
-placeholder="PP-000001"
+
+placeholder="PP-XXXXXXXX"
+
 autocomplete="off"
+
 >
 
-<button id="check">
-🔍 التحقق من البطاقة | Vérifier
+
+<button id="checkButton">
+
+🔍 التحقق من الجائزة
+
 </button>
 
-<div
-id="error"
-class="error"
-style="display:none">
-</div>
 
-<div
-id="result"
-class="result">
+<div id="message"></div>
 
-<h2>
-🎉 الجائزة المؤكدة
-</h2>
 
-<div
-id="prize"
-class="prize">
-</div>
+<div id="result">
+
+
+<div id="status" class="status"></div>
+
+
+<div class="prize">
 
 <div>
-رمز الجائزة:
+
+🎁 الجائزة:
+
 </div>
+
+
+<div id="prizeArabic"></div>
+
 
 <div
-id="rewardCode"
-class="code">
+
+id="prizeFrench"
+
+dir="ltr"
+
+>
+
 </div>
+
+</div>
+
+
+<div>
+
+كود الجائزة:
+
+</div>
+
 
 <div
-id="status"
-class="status">
-</div>
+
+id="displayCode"
+
+class="reward-code"
+
+>
 
 </div>
 
-<div class="note">
 
-هذه الصفحة تعرض نفس الجائزة التي تم تحديدها عند دوران العجلة.<br>
+<button
 
-<span dir="ltr">
-Cette page affiche exactement la récompense obtenue lors du spin.
-</span>
+id="confirmButton"
+
+class="confirm"
+
+>
+
+✅ تأكيد استلام الجائزة
+
+</button>
+
+
+<div
+
+id="confirmedMessage"
+
+class="success-message"
+
+style="display:none"
+
+>
+
+تم تأكيد استلام الجائزة بنجاح ✅
 
 </div>
+
+
+</div>
+
+
+<div class="small">
+
+⚠️ تأكد من الجائزة قبل الضغط على زر تأكيد الاستلام.<br>
+
+بعد التأكيد، لا يمكن استعمال نفس الكود مرة أخرى.
+
+</div>
+
 
 </div>
 
@@ -260,6 +484,7 @@ Cette page affiche exactement la récompense obtenue lors du spin.
 
 
 <script type="module">
+
 
 import {
 
@@ -276,9 +501,19 @@ import {
 
 getFirestore,
 
+collection,
+
+query,
+
+where,
+
+getDocs,
+
 doc,
 
-getDoc
+runTransaction,
+
+serverTimestamp
 
 }
 
@@ -290,92 +525,238 @@ from
 const firebaseConfig={
 
 apiKey:
+
 "AIzaSyCHON3xqMq-Ob-ul1WWB1lY8Qw2UAdUvX8",
 
 authDomain:
+
 "pause-and-plate-chance-card.firebaseapp.com",
 
 projectId:
+
 "pause-and-plate-chance-card",
 
 storageBucket:
+
 "pause-and-plate-chance-card.firebasestorage.app",
 
 messagingSenderId:
+
 "593151678023",
 
 appId:
+
 "1:593151678023:web:71336ac1cb40a51800c362"
 
 };
 
 
 const app=
+
 initializeApp(firebaseConfig);
 
 
 const db=
+
 getFirestore(app);
 
 
-const cardCode=
-document.getElementById("cardCode");
+const rewardCodeInput=
+
+document.getElementById(
+
+"rewardCode"
+
+);
 
 
-const check=
-document.getElementById("check");
+const checkButton=
+
+document.getElementById(
+
+"checkButton"
+
+);
+
+
+const confirmButton=
+
+document.getElementById(
+
+"confirmButton"
+
+);
 
 
 const result=
-document.getElementById("result");
 
+document.getElementById(
 
-const error=
-document.getElementById("error");
+"result"
 
-
-const prize=
-document.getElementById("prize");
-
-
-const rewardCode=
-document.getElementById("rewardCode");
+);
 
 
 const status=
-document.getElementById("status");
+
+document.getElementById(
+
+"status"
+
+);
 
 
-function showError(message){
+const prizeArabic=
 
-error.textContent=message;
+document.getElementById(
 
-error.style.display="block";
+"prizeArabic"
+
+);
+
+
+const prizeFrench=
+
+document.getElementById(
+
+"prizeFrench"
+
+);
+
+
+const displayCode=
+
+document.getElementById(
+
+"displayCode"
+
+);
+
+
+const message=
+
+document.getElementById(
+
+"message"
+
+);
+
+
+const confirmedMessage=
+
+document.getElementById(
+
+"confirmedMessage"
+
+);
+
+
+let currentDocumentId=null;
+
+
+let currentRewardCode=null;
+
+
+let currentPrize=null;
+
+
+function showMessage(
+
+text,
+
+type=""
+
+){
+
+message.textContent=text;
+
+message.className=
+
+type==="error"
+
+?
+
+"error-message"
+
+:
+
+"success-message";
+
+}
+
+
+function clearResult(){
 
 result.style.display="none";
 
+confirmedMessage.style.display="none";
+
+currentDocumentId=null;
+
+currentRewardCode=null;
+
+currentPrize=null;
+
 }
 
 
-function hideError(){
+function getPrizeArabic(prize){
 
-error.style.display="none";
+const prizes={
+
+"Café au choix":
+
+"قهوة من اختيارك",
+
+"Boisson offerte":
+
+"مشروب مجاني",
+
+"Dessert offert":
+
+"حلوى مجانية",
+
+"Side dish offert":
+
+"طبق جانبي مجاني",
+
+"Pizza offerte":
+
+"بيتزا مجانية",
+
+"-10% sur votre prochaine visite":
+
+"خصم 10% في زيارتك القادمة"
+
+};
+
+return prizes[prize] || prize;
 
 }
 
 
-check.onclick=async()=>{
+checkButton.onclick=
 
-const id=
-cardCode.value
+async()=>{
+
+
+const code=
+
+rewardCodeInput.value
+
 .trim()
+
 .toUpperCase();
 
 
-if(!id){
+if(!code){
 
-showError(
-"المرجو إدخال رمز البطاقة."
+showMessage(
+
+"المرجو إدخال كود الجائزة.",
+
+"error"
+
 );
 
 return;
@@ -383,148 +764,436 @@ return;
 }
 
 
-if(!/^PP-\d{6}$/.test(id)){
-
-showError(
-"رمز البطاقة غير صحيح. مثال: PP-000001"
-);
-
-return;
-
-}
+clearResult();
 
 
-check.disabled=true;
+checkButton.disabled=true;
 
-check.textContent=
+checkButton.textContent=
+
 "جاري التحقق...";
-
-
-hideError();
 
 
 try{
 
 
-const cardRef=
-doc(
+const rewardsRef=
+
+collection(
 
 db,
 
-"authorizedUsers",
+"spins"
 
-"Admin",
+);
 
-"Cards",
 
-id
+const rewardQuery=
+
+query(
+
+rewardsRef,
+
+where(
+
+"rewardCode",
+
+"==",
+
+code
+
+)
 
 );
 
 
 const snapshot=
-await getDoc(cardRef);
+
+await getDocs(
+
+rewardQuery
+
+);
 
 
-if(!snapshot.exists()){
+if(snapshot.empty){
 
-showError(
-"❌ هذه البطاقة غير موجودة في النظام."
+result.style.display="block";
+
+result.className="invalid";
+
+status.textContent=
+
+"❌ الكود غير صحيح";
+
+
+prizeArabic.textContent=
+
+"لم يتم العثور على هذه الجائزة";
+
+
+prizeFrench.textContent=
+
+"Code introuvable";
+
+
+displayCode.textContent=code;
+
+
+confirmButton.style.display="none";
+
+
+showMessage(
+
+"هذا الكود غير موجود.",
+
+"error"
+
 );
 
 return;
+
+}
+
+
+const rewardDoc=
+
+snapshot.docs[0];
+
+
+const rewardData=
+
+rewardDoc.data();
+
+
+currentDocumentId=
+
+rewardDoc.id;
+
+
+currentRewardCode=
+
+rewardData.rewardCode;
+
+
+currentPrize=
+
+rewardData.prize;
+
+
+prizeArabic.textContent=
+
+getPrizeArabic(
+
+rewardData.prize
+
+);
+
+
+prizeFrench.textContent=
+
+rewardData.prize;
+
+
+displayCode.textContent=
+
+rewardData.rewardCode;
+
+
+result.style.display="block";
+
+
+if(
+
+rewardData.claimed===true
+
+){
+
+
+result.className="already";
+
+
+status.textContent=
+
+"⚠️ الجائزة مستلمة من قبل";
+
+
+confirmButton.style.display="none";
+
+
+showMessage(
+
+"هذا الكود تم تأكيد استلامه من قبل.",
+
+"error"
+
+);
+
+
+}else{
+
+
+result.className="valid";
+
+
+status.textContent=
+
+"✅ الجائزة صحيحة";
+
+
+confirmButton.style.display="block";
+
+
+showMessage(
+
+"تم التحقق من الجائزة بنجاح.",
+
+"success"
+
+);
+
+}
+
+
+}catch(error){
+
+console.error(error);
+
+
+showMessage(
+
+"Firebase Error: "+
+
+error.message,
+
+"error"
+
+);
+
+}finally{
+
+
+checkButton.disabled=false;
+
+checkButton.textContent=
+
+"🔍 التحقق من الجائزة";
+
+}
+
+
+};
+
+
+confirmButton.onclick=
+
+async()=>{
+
+
+if(
+
+!currentDocumentId ||
+
+!currentRewardCode
+
+){
+
+return;
+
+}
+
+
+confirmButton.disabled=true;
+
+confirmButton.textContent=
+
+"جاري تأكيد الاستلام...";
+
+
+try{
+
+
+const rewardRef=
+
+doc(
+
+db,
+
+"spins",
+
+currentDocumentId
+
+);
+
+
+await runTransaction(
+
+db,
+
+async transaction=>{
+
+
+const fresh=
+
+await transaction.get(
+
+rewardRef
+
+);
+
+
+if(
+
+!fresh.exists()
+
+){
+
+throw new Error(
+
+"REWARD_NOT_FOUND"
+
+);
 
 }
 
 
 const data=
-snapshot.data();
+
+fresh.data();
 
 
 if(
 
-!data.prize ||
-
-!data.rewardCode
+data.claimed===true
 
 ){
 
-showError(
+throw new Error(
 
-"⚠️ هذه البطاقة لم يتم تدويرها بعد، ولا توجد جائزة مسجلة لها."
+"ALREADY_CLAIMED"
 
 );
-
-return;
 
 }
 
 
-prize.innerHTML=
+transaction.update(
 
-"<strong>"+
+rewardRef,
 
-data.prize+
+{
 
-"</strong>";
+claimed:true,
 
+claimedAt:
 
-rewardCode.textContent=
-data.rewardCode;
+serverTimestamp()
 
+}
 
-if(data.status==="used"){
+);
 
-status.className=
-"status used";
+}
+
+);
+
 
 status.textContent=
-"⚠️ هذه البطاقة مستعملة من قبل.";
+
+"✅ تم استلام الجائزة";
+
+
+confirmButton.style.display="none";
+
+
+confirmedMessage.style.display="block";
+
+
+result.className="valid";
+
+
+showMessage(
+
+"تم تسجيل استلام الجائزة بنجاح.",
+
+"success"
+
+);
+
+
+}catch(error){
+
+console.error(error);
+
+
+if(
+
+error.message==="ALREADY_CLAIMED"
+
+){
+
+status.textContent=
+
+"⚠️ الجائزة مستلمة من قبل";
+
+
+confirmButton.style.display="none";
+
+
+result.className="already";
+
+
+showMessage(
+
+"هذه الجائزة تم استلامها من قبل.",
+
+"error"
+
+);
 
 }else{
 
-status.className=
-"status valid";
 
-status.textContent=
-"✅ البطاقة صحيحة والجائزة مؤكدة.";
+showMessage(
 
-}
+"وقع خطأ أثناء تأكيد الاستلام: "+
 
+error.message,
 
-result.style.display=
-"block";
+"error"
 
-
-}catch(e){
-
-console.error(e);
-
-showError(
-"Firebase Error: "+
-e.message
 );
 
+
+confirmButton.disabled=false;
+
+
+confirmButton.textContent=
+
+"✅ تأكيد استلام الجائزة";
+
 }
 
+}
 
-check.disabled=false;
-
-check.textContent=
-"🔍 التحقق من البطاقة | Vérifier";
 
 };
 
 
-cardCode.addEventListener(
+rewardCodeInput.addEventListener(
 
 "keydown",
 
-e=>{
+event=>{
 
-if(e.key==="Enter"){
 
-check.click();
+if(
+
+event.key==="Enter"
+
+){
+
+checkButton.click();
 
 }
 
@@ -532,7 +1201,9 @@ check.click();
 
 );
 
+
 </script>
+
 
 </body>
 
