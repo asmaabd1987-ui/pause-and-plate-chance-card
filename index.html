@@ -163,254 +163,143 @@ line-height:1.8;
 }
 
 .review-card{
-
 margin-top:24px;
-
-background:
-linear-gradient(
+background:linear-gradient(
 145deg,
 #fffdf8 0%,
 #f8f1df 100%
 );
-
 border:1px solid #e6d9b7;
-
 border-radius:22px;
-
 padding:22px 18px;
-
 color:var(--green);
-
-box-shadow:
-0 8px 22px #00000016;
-
+box-shadow:0 8px 22px #00000016;
 position:relative;
-
 overflow:hidden;
-
-animation:
-reviewAppear .6s ease both;
-
+animation:reviewAppear .6s ease both;
 }
 
 .review-card::before{
-
 content:"";
-
 position:absolute;
-
 top:-45px;
-
 left:-45px;
-
 width:120px;
-
 height:120px;
-
 border-radius:50%;
-
 background:#D9A51E18;
-
 }
 
 .review-card::after{
-
 content:"";
-
 position:absolute;
-
 bottom:-55px;
-
 right:-45px;
-
 width:150px;
-
 height:150px;
-
 border-radius:50%;
-
 background:#094B2D0D;
-
 }
 
 .google-badge{
-
 position:relative;
-
 z-index:1;
-
 display:inline-flex;
-
 align-items:center;
-
 gap:8px;
-
 background:#fff;
-
 padding:7px 14px;
-
 border-radius:999px;
-
 font-size:13px;
-
 font-weight:bold;
-
 color:#4b554d;
-
 box-shadow:0 3px 10px #00000012;
-
 margin-bottom:14px;
-
 direction:ltr;
-
 }
 
 .google-icon{
-
 font-size:19px;
-
 font-weight:900;
-
 }
 
 .review-title{
-
 position:relative;
-
 z-index:1;
-
 font-size:20px;
-
 font-weight:800;
-
 line-height:1.7;
-
 margin-bottom:7px;
-
 }
 
 .review-subtitle{
-
 position:relative;
-
 z-index:1;
-
 font-family:Georgia,serif;
-
 font-size:17px;
-
 font-style:italic;
-
 line-height:1.6;
-
 color:#536157;
-
 direction:ltr;
-
 }
 
 .review-text{
-
 position:relative;
-
 z-index:1;
-
 margin-top:14px;
-
 font-size:14px;
-
 line-height:1.7;
-
 color:#667065;
-
 }
 
 .review{
-
 position:relative;
-
 z-index:2;
-
 display:flex;
-
 align-items:center;
-
 justify-content:center;
-
 gap:8px;
-
 width:100%;
-
 margin-top:18px;
-
 background:var(--gold);
-
 color:#17351f;
-
 text-decoration:none;
-
 padding:14px 18px;
-
 border-radius:999px;
-
 font-weight:800;
-
 font-size:16px;
-
 box-shadow:
-
 0 5px 0 #ae8214,
-
 0 8px 18px #0000001c;
-
 transition:
-
 transform .18s ease,
-
 box-shadow .18s ease;
-
 }
 
 .review:hover{
-
 transform:translateY(-2px);
-
 box-shadow:
-
 0 7px 0 #ae8214,
-
 0 11px 22px #00000025;
-
 }
 
 .review:active{
-
 transform:translateY(3px);
-
 box-shadow:
-
 0 2px 0 #ae8214,
-
 0 4px 10px #00000018;
-
 }
 
 @keyframes reviewAppear{
 
 from{
-
 opacity:0;
-
 transform:translateY(14px) scale(.98);
-
 }
 
 to{
-
 opacity:1;
-
 transform:translateY(0) scale(1);
-
 }
 
 }
@@ -590,6 +479,16 @@ initializeApp
 from
 "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
+
+import {
+getAuth,
+signInAnonymously,
+onAuthStateChanged
+}
+from
+"https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+
 import {
 getFirestore,
 doc,
@@ -629,8 +528,49 @@ appId:
 const app=
 initializeApp(firebaseConfig);
 
+
+const auth=
+getAuth(app);
+
+
 const db=
 getFirestore(app);
+
+
+let anonymousUser=null;
+
+let authReady=false;
+
+
+try{
+
+await signInAnonymously(auth);
+
+anonymousUser=auth.currentUser;
+
+authReady=true;
+
+}catch(error){
+
+console.error("Anonymous Authentication Error:",error);
+
+}
+
+
+onAuthStateChanged(
+auth,
+user=>{
+
+if(user){
+
+anonymousUser=user;
+
+authReady=true;
+
+}
+
+}
+);
 
 
 const prizes=[
@@ -683,35 +623,53 @@ color:"#C8D0B8"
 const canvas=
 document.getElementById("wheel");
 
+
 const ctx=
 canvas.getContext("2d");
 
+
 const cx=350;
+
 const cy=350;
+
 const r=320;
+
 
 const visualArc=
 2*Math.PI/prizes.length;
 
+
 let angle=0;
+
 let spinning=false;
 
 
 function draw(){
 
-ctx.clearRect(0,0,700,700);
+ctx.clearRect(
+0,
+0,
+700,
+700
+);
+
 
 let start=
 angle-Math.PI/2;
+
 
 prizes.forEach(p=>{
 
 const arc=
 visualArc;
 
+
 ctx.beginPath();
 
-ctx.moveTo(cx,cy);
+ctx.moveTo(
+cx,
+cy
+);
 
 ctx.arc(
 cx,
@@ -735,17 +693,27 @@ ctx.lineWidth=5;
 
 ctx.stroke();
 
+
 ctx.save();
 
-ctx.translate(cx,cy);
+ctx.translate(
+cx,
+cy
+);
 
-ctx.rotate(start+arc/2);
+ctx.rotate(
+start+arc/2
+);
 
-ctx.textAlign="right";
+ctx.textAlign=
+"right";
 
-ctx.fillStyle="#17351f";
+ctx.fillStyle=
+"#17351f";
 
-ctx.font="bold 19px Arial";
+ctx.font=
+"bold 19px Arial";
+
 
 ctx.fillText(
 
@@ -760,7 +728,10 @@ p.name,
 
 );
 
-ctx.font="bold 18px Arial";
+
+ctx.font=
+"bold 18px Arial";
+
 
 ctx.fillText(
 p.ar,
@@ -768,7 +739,9 @@ p.ar,
 18
 );
 
+
 ctx.restore();
+
 
 start+=arc;
 
@@ -785,10 +758,12 @@ cy,
 2*Math.PI
 );
 
+
 ctx.fillStyle=
 "#094B2D";
 
 ctx.fill();
+
 
 ctx.strokeStyle=
 "#D9A51E";
@@ -797,17 +772,23 @@ ctx.lineWidth=7;
 
 ctx.stroke();
 
-ctx.fillStyle="#fff";
 
-ctx.textAlign="center";
+ctx.fillStyle=
+"#fff";
 
-ctx.font="bold 24px Georgia";
+ctx.textAlign=
+"center";
+
+ctx.font=
+"bold 24px Georgia";
+
 
 ctx.fillText(
 "PAUSE",
 cx,
 cy-5
 );
+
 
 ctx.fillText(
 "& PLATE",
@@ -825,16 +806,19 @@ Math.random()*100;
 
 let s=0;
 
+
 for(
 const p of prizes
 ){
 
 s+=p.pct;
 
+
 if(x<=s)
 return p;
 
 }
+
 
 return prizes[0];
 
@@ -846,7 +830,10 @@ function makeCode(){
 const chars=
 "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
 
-let code="PP-";
+
+let code=
+"PP-";
+
 
 for(
 let i=0;
@@ -864,33 +851,49 @@ chars.length
 
 }
 
+
 return code;
 
 }
 
 
-function showResult(type,title,messageText,prizeData=null,codeValue=null){
+function showResult(
+
+type,
+title,
+messageText,
+prizeData=null,
+codeValue=null
+
+){
 
 const result=
 document.getElementById("result");
 
+
 const resultTitle=
 document.getElementById("resultTitle");
+
 
 const resultMessage=
 document.getElementById("resultMessage");
 
+
 const prizeBox=
 document.getElementById("prizeBox");
+
 
 const prize=
 document.getElementById("prize");
 
+
 const code=
 document.getElementById("code");
 
+
 const instruction=
 document.getElementById("codeInstruction");
+
 
 const reviewCard=
 document.getElementById("reviewCard");
@@ -900,11 +903,14 @@ result.className=
 "result "+
 type;
 
+
 result.style.display=
 "block";
 
+
 resultTitle.innerHTML=
 title;
+
 
 resultMessage.innerHTML=
 messageText;
@@ -913,11 +919,14 @@ messageText;
 prizeBox.style.display=
 "none";
 
+
 code.style.display=
 "none";
 
+
 instruction.style.display=
 "none";
+
 
 reviewCard.style.display=
 "none";
@@ -927,6 +936,7 @@ if(prizeData){
 
 prizeBox.style.display=
 "block";
+
 
 prize.innerHTML=
 
@@ -948,11 +958,14 @@ if(codeValue){
 code.style.display=
 "inline-block";
 
+
 code.textContent=
 codeValue;
 
+
 instruction.style.display=
 "block";
+
 
 reviewCard.style.display=
 "block";
@@ -1000,13 +1013,33 @@ return;
 }
 
 
+if(!authReady || !anonymousUser){
+
+showResult(
+
+"invalid",
+
+"⚠️ تعذر الاتصال",
+
+"المرجو إعادة تحميل الصفحة والمحاولة من جديد.<br>"+
+"<span dir='ltr'>Veuillez recharger la page et réessayer.</span>"
+
+);
+
+return;
+
+}
+
+
 spinning=true;
 
 
 const spinButton=
 document.getElementById("spin");
 
-spinButton.disabled=true;
+
+spinButton.disabled=
+true;
 
 
 try{
@@ -1014,16 +1047,24 @@ try{
 
 const cardRef=
 doc(
+
 db,
+
 "authorizedUsers",
+
 "Admin",
+
 "Cards",
+
 cardId
+
 );
 
 
 const cardSnap=
-await getDoc(cardRef);
+await getDoc(
+cardRef
+);
 
 
 if(!cardSnap.exists()){
@@ -1041,7 +1082,8 @@ showResult(
 
 spinning=false;
 
-spinButton.disabled=false;
+spinButton.disabled=
+false;
 
 return;
 
@@ -1052,7 +1094,9 @@ const currentData=
 cardSnap.data();
 
 
-if(currentData.status!=="unused"){
+if(
+currentData.status!=="unused"
+){
 
 const existingPrize={
 
@@ -1060,7 +1104,8 @@ name:
 currentData.prize || "",
 
 ar:
-currentData.prizeArabic || currentData.prize || ""
+currentData.prizeArabic ||
+currentData.prize || ""
 
 };
 
@@ -1079,9 +1124,11 @@ currentData.rewardCode || null
 
 );
 
+
 spinning=false;
 
-spinButton.disabled=false;
+spinButton.disabled=
+false;
 
 return;
 
@@ -1091,8 +1138,12 @@ return;
 const winner=
 weightedPick();
 
+
 const idx=
-prizes.indexOf(winner);
+prizes.indexOf(
+winner
+);
+
 
 const target=
 (idx+0.5)*
@@ -1104,18 +1155,27 @@ const finalRotation=
 angle+
 
 Math.PI*2*
-(5+
+
+(
+5+
 Math.floor(
 Math.random()*3
-))+
+)
+)+
 
-(Math.PI*2-target);
+(
+Math.PI*2-
+target
+);
 
 
 const start=
 angle;
 
-const duration=4500;
+
+const duration=
+4500;
+
 
 const t0=
 performance.now();
@@ -1130,23 +1190,28 @@ Math.min(
 duration
 );
 
+
 const ease=
 1-Math.pow(
 1-k,
 4
 );
 
+
 angle=
 start+
 (finalRotation-start)*
 ease;
+
 
 draw();
 
 
 if(k<1){
 
-requestAnimationFrame(anim);
+requestAnimationFrame(
+anim
+);
 
 }else{
 
@@ -1161,12 +1226,15 @@ winner
 }
 
 
-requestAnimationFrame(anim);
+requestAnimationFrame(
+anim
+);
 
 
 }catch(error){
 
 console.error(error);
+
 
 showResult(
 
@@ -1179,9 +1247,12 @@ showResult(
 
 );
 
+
 spinning=false;
 
-spinButton.disabled=false;
+
+spinButton.disabled=
+false;
 
 }
 
@@ -1274,7 +1345,10 @@ serverTimestamp()
 
 await addDoc(
 
-collection(db,"spins"),
+collection(
+db,
+"spins"
+),
 
 {
 
@@ -1293,7 +1367,8 @@ rewardCode,
 status:
 "prize_won",
 
-claimed:false,
+claimed:
+false,
 
 createdAt:
 serverTimestamp()
@@ -1332,10 +1407,14 @@ error.message==="ALREADY_USED"
 ){
 
 const fresh=
-await getDoc(cardRef);
+await getDoc(
+cardRef
+);
+
 
 const data=
 fresh.data();
+
 
 showResult(
 
@@ -1351,7 +1430,8 @@ name:
 data.prize || "",
 
 ar:
-data.prizeArabic || data.prize || ""
+data.prizeArabic ||
+data.prize || ""
 
 },
 
@@ -1374,11 +1454,14 @@ showResult(
 
 }
 
+
 spinning=false;
+
 
 document
 .getElementById("spin")
-.disabled=false;
+.disabled=
+false;
 
 }
 
