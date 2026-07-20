@@ -2,7 +2,9 @@
 <html lang="ar" dir="rtl">
 
 <head>
+
 <meta charset="utf-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <title>Pause & Plate — Chance Card</title>
@@ -20,162 +22,212 @@
 box-sizing:border-box;
 }
 
+html{
+scroll-behavior:smooth;
+}
+
 body{
+
 margin:0;
+
 background:var(--cream);
+
 color:var(--ink);
-font-family:Arial,"Noto Sans Arabic",sans-serif;
+
+font-family:
+Arial,
+"Noto Sans Arabic",
+sans-serif;
+
 }
 
 .wrap{
+
 max-width:760px;
+
 margin:auto;
+
 padding:22px;
+
 }
 
 .card{
+
 background:#fffdf8;
+
 border-radius:28px;
+
 padding:26px;
-box-shadow:0 14px 40px #00000018;
+
+box-shadow:
+
+0 14px 40px #00000018;
+
 }
 
 .brand{
+
 text-align:center;
+
 color:var(--green);
+
 font-family:Georgia,serif;
+
 font-size:28px;
+
 font-weight:700;
+
 direction:ltr;
+
 }
 
 .brand span{
+
 color:var(--gold);
+
 }
 
 h1{
+
 text-align:center;
+
 margin:10px 0 4px;
+
 font-size:27px;
+
 color:var(--green);
+
 }
 
 .sub{
+
 text-align:center;
+
 color:#667065;
+
 margin-bottom:22px;
+
 line-height:1.7;
+
 }
 
 .wheelbox{
+
 position:relative;
+
 max-width:560px;
+
 margin:0 auto;
+
 direction:ltr;
+
 }
 
 .pointer{
+
 position:absolute;
+
 z-index:3;
+
 top:-5px;
+
 left:50%;
+
 transform:translateX(-50%);
+
 width:0;
+
 height:0;
+
 border-left:22px solid transparent;
+
 border-right:22px solid transparent;
+
 border-top:48px solid var(--gold);
+
 filter:drop-shadow(0 3px 2px #0003);
+
 }
 
 canvas{
+
 width:100%;
+
 height:auto;
+
 display:block;
+
 filter:drop-shadow(0 8px 12px #0002);
+
 }
 
 button{
+
 display:block;
+
 margin:22px auto 0;
+
 background:var(--green);
+
 color:#fff;
+
 border:0;
+
 border-radius:999px;
+
 padding:16px 38px;
+
 font-size:18px;
+
 font-weight:700;
+
 cursor:pointer;
+
 }
 
 button:disabled{
+
 opacity:.55;
+
 cursor:not-allowed;
+
 }
 
 .note{
+
 text-align:center;
+
 font-size:12px;
+
 color:#69736a;
+
 margin-top:14px;
+
 line-height:1.7;
+
 }
 
 /* =========================
-   POPUP
+   RESULT SECTION
 ========================= */
 
-.popup-overlay{
+.result{
 
-position:fixed;
+display:none;
 
-inset:0;
+margin-top:28px;
 
-z-index:9999;
+padding:24px 18px;
 
-background:
+border-radius:24px;
 
-rgba(0,0,0,.72);
+text-align:center;
 
-backdrop-filter:blur(8px);
-
-display:flex;
-
-align-items:center;
-
-justify-content:center;
-
-padding:18px;
-
-opacity:0;
-
-visibility:hidden;
-
-transition:
-
-opacity .35s ease,
-
-visibility .35s ease;
+animation:resultAppear .6s ease both;
 
 }
 
-.popup-overlay.show{
-
-opacity:1;
-
-visibility:visible;
-
-}
-
-.popup{
-
-width:100%;
-
-max-width:560px;
-
-max-height:calc(100vh - 36px);
-
-overflow-y:auto;
+.result.success{
 
 background:
 
@@ -183,113 +235,71 @@ linear-gradient(
 
 145deg,
 
-#fffdf8 0%,
+#eef6ec,
 
-#f7f0df 100%
+#e1efdf
 
 );
 
-border-radius:30px;
-
-padding:28px 20px 24px;
-
-box-shadow:
-
-0 25px 80px #00000055;
-
-position:relative;
-
-transform:scale(.82) translateY(25px);
-
-opacity:0;
-
-transition:
-
-transform .45s cubic-bezier(.17,.67,.3,1.3),
-
-opacity .35s ease;
-
-}
-
-.popup-overlay.show .popup{
-
-transform:scale(1) translateY(0);
-
-opacity:1;
-
-}
-
-.close-popup{
-
-position:absolute;
-
-top:13px;
-
-left:13px;
-
-width:48px;
-
-height:48px;
-
-padding:0;
-
-margin:0;
-
-border-radius:50%;
-
-background:var(--green);
-
-color:white;
-
-font-size:28px;
-
-line-height:48px;
-
-box-shadow:0 5px 15px #0003;
-
-z-index:5;
-
-}
-
-.close-popup:hover{
-
-transform:rotate(90deg);
-
-}
-
-/* Popup Result */
-
-.popup-result{
-
-text-align:center;
-
-}
-
-.popup-result h2{
-
-margin:25px 0 10px;
-
-font-size:30px;
-
-line-height:1.5;
+border:2px solid #a8c6a3;
 
 color:var(--green);
 
 }
 
-.popup-message{
+.result.used{
 
-font-size:18px;
+background:
+
+linear-gradient(
+
+145deg,
+
+#fff8e9,
+
+#f8edcf
+
+);
+
+border:2px solid #e1b95b;
+
+color:#795609;
+
+}
+
+.result.invalid{
+
+background:#fff0f0;
+
+border:2px solid #d99b9b;
+
+color:#9b2020;
+
+}
+
+.result h2{
+
+margin:0 0 12px;
+
+font-size:27px;
+
+line-height:1.5;
+
+}
+
+.result-message{
+
+font-size:17px;
 
 line-height:1.8;
 
 color:#59635b;
 
-margin-bottom:18px;
-
 }
 
-/* Prize */
+/* =========================
+   PRIZE BOX
+========================= */
 
 .prize-box{
 
@@ -301,9 +311,9 @@ border-radius:22px;
 
 padding:20px 15px;
 
-margin:18px 0;
+margin:20px 0;
 
-font-size:21px;
+font-size:22px;
 
 font-weight:bold;
 
@@ -333,7 +343,19 @@ color:var(--green);
 
 }
 
-/* Code */
+/* =========================
+   CODE
+========================= */
+
+.code-label{
+
+font-size:15px;
+
+color:#69736a;
+
+margin-top:15px;
+
+}
 
 .code{
 
@@ -373,17 +395,61 @@ color:#69736a;
 
 line-height:1.8;
 
-margin:6px 0 20px;
+margin:6px 0 5px;
 
 }
 
 /* =========================
-   GOOGLE REVIEW CARD
+   GOOGLE REVIEW POPUP
 ========================= */
 
-.review-card{
+.review-overlay{
 
-margin-top:20px;
+position:fixed;
+
+inset:0;
+
+z-index:9999;
+
+background:
+
+rgba(0,0,0,.72);
+
+backdrop-filter:blur(8px);
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+padding:18px;
+
+opacity:0;
+
+visibility:hidden;
+
+transition:
+
+opacity .35s ease,
+
+visibility .35s ease;
+
+}
+
+.review-overlay.show{
+
+opacity:1;
+
+visibility:visible;
+
+}
+
+.review-popup{
+
+width:100%;
+
+max-width:540px;
 
 background:
 
@@ -397,165 +463,133 @@ linear-gradient(
 
 );
 
-border:2px solid #e6d9b7;
+border-radius:30px;
 
-border-radius:24px;
-
-padding:24px 17px 20px;
-
-color:var(--green);
+padding:30px 20px 25px;
 
 box-shadow:
 
-0 10px 28px #00000018;
+0 25px 80px #00000055;
 
 position:relative;
 
-overflow:hidden;
+text-align:center;
+
+transform:scale(.8) translateY(30px);
+
+opacity:0;
+
+transition:
+
+transform .45s cubic-bezier(.17,.67,.3,1.3),
+
+opacity .35s ease;
 
 }
 
-.review-card::before{
+.review-overlay.show .review-popup{
 
-content:"";
+transform:scale(1) translateY(0);
+
+opacity:1;
+
+}
+
+.close-review{
 
 position:absolute;
 
-top:-55px;
+top:13px;
 
-left:-45px;
+left:13px;
 
-width:145px;
+width:48px;
 
-height:145px;
+height:48px;
 
-border-radius:50%;
+padding:0;
 
-background:#D9A51E20;
-
-}
-
-.review-card::after{
-
-content:"";
-
-position:absolute;
-
-bottom:-65px;
-
-right:-50px;
-
-width:170px;
-
-height:170px;
+margin:0;
 
 border-radius:50%;
 
-background:#094B2D10;
+background:var(--green);
+
+color:white;
+
+font-size:28px;
+
+line-height:48px;
+
+box-shadow:0 5px 15px #0003;
 
 }
 
-.google-badge{
+.close-review:hover{
 
-position:relative;
-
-z-index:1;
-
-display:inline-flex;
-
-align-items:center;
-
-gap:9px;
-
-background:white;
-
-padding:8px 16px;
-
-border-radius:999px;
-
-font-size:14px;
-
-font-weight:bold;
-
-color:#4b554d;
-
-box-shadow:0 4px 12px #00000015;
-
-direction:ltr;
+transform:rotate(90deg);
 
 }
 
-.google-icon{
+.review-icon{
 
-font-size:22px;
+font-size:55px;
 
-font-weight:900;
+margin-bottom:5px;
 
-}
+animation:
 
-.review-title{
-
-position:relative;
-
-z-index:1;
-
-font-size:22px;
-
-font-weight:800;
-
-line-height:1.65;
-
-margin-top:17px;
+reviewIconBounce 1.4s infinite;
 
 }
 
-.review-subtitle{
+.review-popup h2{
 
-position:relative;
+color:var(--green);
 
-z-index:1;
-
-font-family:Georgia,serif;
-
-font-size:17px;
-
-font-style:italic;
+font-size:26px;
 
 line-height:1.6;
 
-color:#536157;
-
-direction:ltr;
-
-margin-top:8px;
+margin:5px 0 10px;
 
 }
 
-.review-text{
+.review-popup-subtitle{
 
-position:relative;
+font-family:Georgia,serif;
 
-z-index:1;
+font-style:italic;
 
-margin-top:14px;
+font-size:17px;
 
-font-size:14px;
+color:#536157;
+
+line-height:1.6;
+
+direction:ltr;
+
+}
+
+.review-popup-text{
+
+font-size:16px;
+
+color:#667065;
 
 line-height:1.8;
 
-color:#667065;
+margin:18px 0;
 
 }
 
 /* =========================
-   GOOGLE BUTTON EFFECT
+   GOOGLE BUTTON
 ========================= */
 
-.review{
+.google-review-button{
 
 position:relative;
-
-z-index:2;
 
 display:flex;
 
@@ -563,11 +597,15 @@ align-items:center;
 
 justify-content:center;
 
-gap:9px;
+gap:10px;
 
 width:100%;
 
-margin-top:20px;
+margin:20px auto 12px;
+
+padding:18px 14px;
+
+border-radius:999px;
 
 background:
 
@@ -587,21 +625,17 @@ color:#17351f;
 
 text-decoration:none;
 
-padding:17px 15px;
-
-border-radius:999px;
+font-size:17px;
 
 font-weight:900;
 
-font-size:17px;
+overflow:hidden;
 
 box-shadow:
 
-0 6px 0 #ae8214,
+0 7px 0 #ae8214,
 
-0 10px 25px #00000028;
-
-overflow:hidden;
+0 12px 28px #00000030;
 
 animation:
 
@@ -609,7 +643,7 @@ reviewPulse 2s infinite;
 
 }
 
-.review::before{
+.google-review-button::before{
 
 content:"";
 
@@ -631,7 +665,7 @@ linear-gradient(
 
 transparent,
 
-rgba(255,255,255,.75),
+rgba(255,255,255,.8),
 
 transparent
 
@@ -639,47 +673,61 @@ transparent
 
 transform:skewX(-25deg);
 
-animation:
-
-shine 2.8s infinite;
+animation:shine 2.8s infinite;
 
 }
 
-.review::after{
-
-content:"⭐";
-
-position:absolute;
-
-right:16px;
-
-font-size:18px;
-
-animation:starBounce 1.4s infinite;
-
-}
-
-.review:hover{
+.google-review-button:hover{
 
 transform:translateY(-3px) scale(1.02);
 
-box-shadow:
+}
 
-0 9px 0 #ae8214,
+.close-review-button{
 
-0 15px 30px #00000035;
+width:100%;
+
+margin:12px auto 0;
+
+padding:13px;
+
+background:transparent;
+
+border:2px solid #c7b98f;
+
+color:var(--green);
+
+font-size:15px;
 
 }
 
-.review:active{
+.close-review-button:hover{
 
-transform:translateY(3px);
+background:#f2ead7;
 
-box-shadow:
+}
 
-0 3px 0 #ae8214,
+/* =========================
+   ANIMATIONS
+========================= */
 
-0 6px 12px #00000020;
+@keyframes resultAppear{
+
+from{
+
+opacity:0;
+
+transform:translateY(20px);
+
+}
+
+to{
+
+opacity:1;
+
+transform:translateY(0);
+
+}
 
 }
 
@@ -689,9 +737,9 @@ box-shadow:
 
 box-shadow:
 
-0 6px 0 #ae8214,
+0 7px 0 #ae8214,
 
-0 10px 25px #00000028;
+0 12px 28px #00000030;
 
 }
 
@@ -699,11 +747,11 @@ box-shadow:
 
 box-shadow:
 
-0 6px 0 #ae8214,
+0 7px 0 #ae8214,
 
-0 10px 25px #00000028,
+0 12px 28px #00000030,
 
-0 0 0 8px #D9A51E20;
+0 0 0 9px #D9A51E22;
 
 }
 
@@ -725,115 +773,63 @@ left:140%;
 
 }
 
-@keyframes starBounce{
+@keyframes reviewIconBounce{
 
 0%,100%{
 
-transform:scale(1) rotate(0deg);
+transform:translateY(0) scale(1);
 
 }
 
 50%{
 
-transform:scale(1.3) rotate(15deg);
+transform:translateY(-8px) scale(1.08);
 
 }
 
 }
 
-/* Used / Invalid */
-
-.popup.used h2{
-
-color:#8a6110;
-
-}
-
-.popup.invalid h2{
-
-color:#9b2020;
-
-}
-
-.popup.success h2{
-
-color:var(--green);
-
-}
-
-/* Mobile */
+/* =========================
+   MOBILE
+========================= */
 
 @media(max-width:500px){
 
-.popup{
+.review-popup{
 
-padding:25px 15px 20px;
-
-border-radius:25px;
+padding:28px 16px 22px;
 
 }
 
-.popup-result h2{
+.review-popup h2{
 
-font-size:25px;
+font-size:23px;
 
 }
 
-.popup-message{
+.review-popup-text{
+
+font-size:15px;
+
+}
+
+.google-review-button{
 
 font-size:16px;
+
+}
+
+.result h2{
+
+font-size:24px;
 
 }
 
 .prize-box{
 
-font-size:19px;
-
-}
-
-.review-title{
-
 font-size:20px;
 
 }
-
-.review{
-
-font-size:16px;
-
-padding:16px 10px;
-
-}
-
-}
-
-/* Popup entrance */
-
-@keyframes popupGlow{
-
-0%,100%{
-
-box-shadow:
-
-0 25px 80px #00000055;
-
-}
-
-50%{
-
-box-shadow:
-
-0 25px 80px #00000055,
-
-0 0 35px #D9A51E35;
-
-}
-
-}
-
-.popup.success{
-
-animation:popupGlow 2.5s infinite;
 
 }
 
@@ -893,59 +889,15 @@ height="700">
 
 </button>
 
-<div class="note">
-
-دورة واحدة لكل بطاقة • استعمال واحد فقط<br>
-
-<span dir="ltr">
-
-Un seul spin par carte • Une seule utilisation
-
-</span>
-
-<br>
-
-احتمالات الفوز قد تختلف حسب الجائزة.
-
-</div>
-
-</div>
-
-</div>
-
-
-<!-- =========================
-     POPUP RESULT
-========================= -->
+<!-- النتيجة كتبان هنا مباشرة -->
 
 <div
 
-id="popupOverlay"
+id="result"
 
-class="popup-overlay"
-
->
-
-<div
-
-id="popup"
-
-class="popup"
+class="result"
 
 >
-
-<button
-
-id="closePopup"
-
-class="close-popup"
-
->
-
-×
-</button>
-
-<div class="popup-result">
 
 <h2 id="resultTitle"></h2>
 
@@ -953,9 +905,9 @@ class="close-popup"
 
 id="resultMessage"
 
-class="popup-message">
+class="result-message"
 
-</div>
+></div>
 
 <div
 
@@ -979,15 +931,27 @@ style="display:none"
 
 <div
 
+id="codeLabel"
+
+class="code-label"
+
+style="display:none"
+
+>
+
+كود الجائزة | Code de récompense
+
+</div>
+
+<div
+
 class="code"
 
 id="code"
 
 style="display:none"
 
->
-
-</div>
+></div>
 
 <div
 
@@ -1009,33 +973,69 @@ Présentez ce code à notre équipe pour utiliser votre récompense.
 
 </div>
 
-<div
+</div>
 
-id="reviewCard"
+<div class="note">
 
-class="review-card"
+دورة واحدة لكل بطاقة • استعمال واحد فقط<br>
 
-style="display:none"
+<span dir="ltr">
 
->
+Un seul spin par carte • Une seule utilisation
 
-<div class="google-badge">
+</span>
 
-<span class="google-icon">G</span>
+<br>
 
-<span>Google Reviews</span>
+احتمالات الفوز قد تختلف حسب الجائزة.
 
 </div>
 
-<div class="review-title">
+</div>
+
+</div>
+
+
+<!-- =========================
+     GOOGLE REVIEW POPUP فقط
+========================= -->
+
+<div
+
+id="reviewOverlay"
+
+class="review-overlay"
+
+>
+
+<div class="review-popup">
+
+<button
+
+id="closeReview"
+
+class="close-review"
+
+>
+
+×
+</button>
+
+<div class="review-icon">
+
+⭐
+
+</div>
+
+<h2>
 
 كل تجربة عندها قصة…<br>
 
 ورأيك هو العنوان ديالها ✨
 
-</div>
+</h2>
 
-<div class="review-subtitle">
+<div class="review-popup-subtitle">
 
 Chaque expérience a son histoire…<br>
 
@@ -1043,17 +1043,21 @@ votre avis en est le titre ✨
 
 </div>
 
-<div class="review-text">
+<div class="review-popup-text">
 
-شارك رأيك معنا وخلي تجربتك تكون جزءاً من قصتنا 💚
+شارك رأيك معنا وخلي تجربتك تكون جزءاً من قصتنا 💚<br>
+
+<span dir="ltr">
+
+Votre avis compte beaucoup pour nous 💚
+
+</span>
 
 </div>
 
 <a
 
-id="review"
-
-class="review"
+class="google-review-button"
 
 href="https://g.page/r/CZV_cSYvHWLMECA/review"
 
@@ -1067,9 +1071,17 @@ rel="noopener"
 
 </a>
 
-</div>
+<button
 
-</div>
+id="closeReviewButton"
+
+class="close-review-button"
+
+>
+
+إغلاق والعودة للجائزة
+
+</button>
 
 </div>
 
@@ -1238,6 +1250,10 @@ let angle=0;
 let spinning=false;
 
 
+/* =========================
+   DRAW WHEEL
+========================= */
+
 function draw(){
 
 ctx.clearRect(0,0,700,700);
@@ -1362,16 +1378,38 @@ ctx.textAlign="center";
 
 ctx.font="bold 24px Georgia";
 
-ctx.fillText("PAUSE",cx,cy-5);
+ctx.fillText(
 
-ctx.fillText("& PLATE",cx,cy+25);
+"PAUSE",
+
+cx,
+
+cy-5
+
+);
+
+ctx.fillText(
+
+"& PLATE",
+
+cx,
+
+cy+25
+
+);
 
 }
 
 
+/* =========================
+   WEIGHTED PRIZE
+========================= */
+
 function weightedPick(){
 
-let x=Math.random()*100;
+let x=
+
+Math.random()*100;
 
 let s=0;
 
@@ -1388,15 +1426,31 @@ return prizes[0];
 }
 
 
+/* =========================
+   REWARD CODE
+========================= */
+
 function makeCode(){
 
-const chars="ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+const chars=
+
+"ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
 
 let code="PP-";
 
 for(let i=0;i<8;i++){
 
-code+=chars[Math.floor(Math.random()*chars.length)];
+code+=
+
+chars[
+
+Math.floor(
+
+Math.random()*chars.length
+
+)
+
+];
 
 }
 
@@ -1405,7 +1459,11 @@ return code;
 }
 
 
-function openPopup(
+/* =========================
+   DISPLAY RESULT
+========================= */
+
+function showResult(
 
 type,
 
@@ -1419,13 +1477,9 @@ codeValue=null
 
 ){
 
-const overlay=
+const result=
 
-document.getElementById("popupOverlay");
-
-const popup=
-
-document.getElementById("popup");
+document.getElementById("result");
 
 const resultTitle=
 
@@ -1443,6 +1497,10 @@ const prize=
 
 document.getElementById("prize");
 
+const codeLabel=
+
+document.getElementById("codeLabel");
+
 const code=
 
 document.getElementById("code");
@@ -1451,14 +1509,12 @@ const instruction=
 
 document.getElementById("codeInstruction");
 
-const reviewCard=
 
-document.getElementById("reviewCard");
+result.className=
 
+"result "+type;
 
-popup.className=
-
-"popup "+type;
+result.style.display="block";
 
 
 resultTitle.innerHTML=title;
@@ -1468,11 +1524,11 @@ resultMessage.innerHTML=messageText;
 
 prizeBox.style.display="none";
 
+codeLabel.style.display="none";
+
 code.style.display="none";
 
 instruction.style.display="none";
-
-reviewCard.style.display="none";
 
 
 if(prizeData){
@@ -1496,16 +1552,47 @@ prize.innerHTML=
 
 if(codeValue){
 
+codeLabel.style.display="block";
+
 code.style.display="inline-block";
 
 code.textContent=codeValue;
 
 instruction.style.display="block";
 
-reviewCard.style.display="block";
+}
+
+
+/*
+
+النزول تلقائياً للنتيجة
+
+*/
+
+setTimeout(()=>{
+
+result.scrollIntoView({
+
+behavior:"smooth",
+
+block:"center"
+
+});
+
+},450);
 
 }
 
+
+/* =========================
+   REVIEW POPUP
+========================= */
+
+function openReviewPopup(){
+
+const overlay=
+
+document.getElementById("reviewOverlay");
 
 overlay.classList.add("show");
 
@@ -1514,45 +1601,68 @@ document.body.style.overflow="hidden";
 }
 
 
-function closePopup(){
+function closeReviewPopup(){
 
-document
+const overlay=
 
-.getElementById("popupOverlay")
+document.getElementById("reviewOverlay");
 
-.classList.remove("show");
+overlay.classList.remove("show");
 
 document.body.style.overflow="";
 
 }
 
 
-document
-
-.getElementById("closePopup")
-
-.onclick=closePopup;
-
+/* =========================
+   CLOSE POPUP
+========================= */
 
 document
 
-.getElementById("popupOverlay")
+.getElementById("closeReview")
+
+.onclick=
+
+closeReviewPopup;
+
+
+document
+
+.getElementById("closeReviewButton")
+
+.onclick=
+
+closeReviewPopup;
+
+
+document
+
+.getElementById("reviewOverlay")
 
 .onclick=
 
 e=>{
 
-if(e.target.id==="popupOverlay"){
+if(e.target.id==="reviewOverlay"){
 
-closePopup();
+closeReviewPopup();
 
 }
 
 };
 
 
+/* =========================
+   INITIAL DRAW
+========================= */
+
 draw();
 
+
+/* =========================
+   SPIN
+========================= */
 
 document
 
@@ -1572,12 +1682,14 @@ new URLSearchParams(
 
 window.location.search
 
-).get("card");
+)
+
+.get("card");
 
 
 if(!cardId){
 
-openPopup(
+showResult(
 
 "invalid",
 
@@ -1631,7 +1743,7 @@ await getDoc(cardRef);
 
 if(!cardSnap.exists()){
 
-openPopup(
+showResult(
 
 "invalid",
 
@@ -1657,30 +1769,49 @@ const currentData=
 cardSnap.data();
 
 
+/*
+
+إلا كانت البطاقة مستعملة
+
+نبيّنو النتيجة مباشرة
+
+*/
+
 if(currentData.status!=="unused"){
 
 const existingPrize={
 
-name:currentData.prize||"",
+name:
 
-ar:currentData.prizeArabic||currentData.prize||""
+currentData.prize||"",
+
+ar:
+
+currentData.prizeArabic||
+
+currentData.prize||
+
+""
 
 };
 
 
-openPopup(
+showResult(
 
 "used",
 
-"⚠️ تم استخدام هذه البطاقة مسبقاً",
+"🎁 الجائزة ديالك",
 
-"⚠️ Cette carte a déjà été utilisée",
+"هاد البطاقة سبق ليها تدارت.<br>"+
+
+"<span dir='ltr'>Cette carte a déjà été utilisée.</span>",
 
 existingPrize,
 
 currentData.rewardCode||null
 
 );
+
 
 spinning=false;
 
@@ -1691,13 +1822,21 @@ return;
 }
 
 
+/*
+
+أول Spin
+
+*/
+
 const winner=
 
 weightedPick();
 
+
 const idx=
 
 prizes.indexOf(winner);
+
 
 const target=
 
@@ -1708,7 +1847,19 @@ const finalRotation=
 
 angle+
 
-Math.PI*2*(5+Math.floor(Math.random()*3))+
+Math.PI*2*
+
+(
+
+5+
+
+Math.floor(
+
+Math.random()*3
+
+)
+
+)+
 
 (Math.PI*2-target);
 
@@ -1731,6 +1882,7 @@ Math.min(
 (t-t0)/duration
 
 );
+
 
 const ease=
 
@@ -1775,7 +1927,8 @@ requestAnimationFrame(anim);
 
 console.error(error);
 
-openPopup(
+
+showResult(
 
 "invalid",
 
@@ -1787,6 +1940,7 @@ openPopup(
 
 );
 
+
 spinning=false;
 
 spinButton.disabled=false;
@@ -1795,6 +1949,10 @@ spinButton.disabled=false;
 
 };
 
+
+/* =========================
+   SAVE WIN
+========================= */
 
 async function finishSpin(
 
@@ -1838,7 +1996,11 @@ const freshData=
 fresh.data();
 
 
-if(freshData.status!=="unused"){
+if(
+
+freshData.status!=="unused"
+
+){
 
 throw new Error("ALREADY_USED");
 
@@ -1895,7 +2057,19 @@ createdAt:serverTimestamp()
 );
 
 
-openPopup(
+/*
+
+أولاً:
+
+النتيجة كتبان فالصفحة
+
+ثانياً:
+
+Popup Google Reviews كيتحل
+
+*/
+
+showResult(
 
 "success",
 
@@ -1912,7 +2086,16 @@ rewardCode
 );
 
 
+setTimeout(()=>{
+
+openReviewPopup();
+
+},500);
+
+
 spinning=false;
+
+spinButton.disabled=false;
 
 
 }catch(error){
@@ -1920,24 +2103,31 @@ spinning=false;
 console.error(error);
 
 
-if(error.message==="ALREADY_USED"){
+if(
+
+error.message==="ALREADY_USED"
+
+){
 
 const fresh=
 
 await getDoc(cardRef);
+
 
 const data=
 
 fresh.data();
 
 
-openPopup(
+showResult(
 
 "used",
 
-"⚠️ تم استخدام هذه البطاقة مسبقاً",
+"🎁 الجائزة ديالك",
 
-"⚠️ Cette carte a déjà été utilisée",
+"هاد البطاقة سبق ليها تدارت.<br>"+
+
+"<span dir='ltr'>Cette carte a déjà été utilisée.</span>",
 
 {
 
@@ -1953,7 +2143,8 @@ data.rewardCode||null
 
 }else{
 
-openPopup(
+
+showResult(
 
 "invalid",
 
@@ -1967,13 +2158,10 @@ openPopup(
 
 }
 
+
 spinning=false;
 
-document
-
-.getElementById("spin")
-
-.disabled=false;
+spinButton.disabled=false;
 
 }
 
