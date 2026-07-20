@@ -305,6 +305,8 @@ font-weight:bold;
 
 margin-top:15px;
 
+line-height:1.8;
+
 }
 
 .error-message{
@@ -314,6 +316,8 @@ color:#b00020;
 font-weight:bold;
 
 margin-top:15px;
+
+line-height:1.8;
 
 }
 
@@ -410,9 +414,13 @@ autocomplete="off"
 </button>
 
 <div
+
 id="confirmedMessage"
+
 class="success-message"
+
 style="display:none"
+
 >
 
 تم تأكيد استلام الجائزة بنجاح ✅<br>
@@ -435,104 +443,151 @@ Récompense remise avec succès ✅
 
 </div>
 
+
 <script type="module">
 
 import {
+
 initializeApp
+
 }
+
 from
+
 "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
+
 import {
+
 getFirestore,
+
 collection,
+
 query,
+
 where,
+
 getDocs,
+
 doc,
+
 runTransaction,
+
 serverTimestamp
+
 }
+
 from
+
 "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 
 const firebaseConfig={
 
 apiKey:
+
 "AIzaSyCHON3xqMq-Ob-ul1WWB1lY8Qw2UAdUvX8",
 
 authDomain:
+
 "pause-and-plate-chance-card.firebaseapp.com",
 
 projectId:
+
 "pause-and-plate-chance-card",
 
 storageBucket:
+
 "pause-and-plate-chance-card.firebasestorage.app",
 
 messagingSenderId:
+
 "593151678023",
 
 appId:
+
 "1:593151678023:web:71336ac1cb40a51800c362"
 
 };
 
 
-const app=initializeApp(firebaseConfig);
+const app=
 
-const db=getFirestore(app);
+initializeApp(firebaseConfig);
+
+
+const db=
+
+getFirestore(app);
 
 
 const rewardCodeInput=
+
 document.getElementById("rewardCode");
 
+
 const checkButton=
+
 document.getElementById("checkButton");
 
+
 const confirmButton=
+
 document.getElementById("confirmButton");
 
+
 const result=
+
 document.getElementById("result");
 
+
 const status=
+
 document.getElementById("status");
 
+
 const prizeArabic=
+
 document.getElementById("prizeArabic");
 
+
 const prizeFrench=
+
 document.getElementById("prizeFrench");
 
+
 const displayCode=
+
 document.getElementById("displayCode");
 
+
 const message=
+
 document.getElementById("message");
 
+
 const confirmedMessage=
+
 document.getElementById("confirmedMessage");
 
 
 let currentDocumentId=null;
 
-let currentRewardCode=null;
 
-
-function showMessage(
-text,
-type=""
-){
+function showMessage(text,type=""){
 
 message.innerHTML=text;
 
 message.className=
+
 type==="error"
+
 ?
+
 "error-message"
+
 :
+
 "success-message";
 
 }
@@ -549,7 +604,10 @@ confirmButton.style.display="block";
 confirmButton.disabled=false;
 
 confirmButton.textContent=
+
 "✅ تأكيد استلام الجائزة";
+
+currentDocumentId=null;
 
 }
 
@@ -559,21 +617,27 @@ function getPrizeArabic(prize){
 const prizes={
 
 "Café au choix":
+
 "قهوة من اختيارك",
 
 "Boisson offerte":
+
 "مشروب مجاني",
 
 "Dessert offert":
+
 "حلوى مجانية",
 
 "Side dish offert":
+
 "طبق جانبي مجاني",
 
 "Pizza offerte":
+
 "بيتزا مجانية",
 
 "-10% sur votre prochaine visite":
+
 "خصم 10% في زيارتك القادمة"
 
 };
@@ -587,16 +651,22 @@ checkButton.onclick=async()=>{
 
 
 const code=
+
 rewardCodeInput.value
+
 .trim()
+
 .toUpperCase();
 
 
 if(!code){
 
 showMessage(
+
 "المرجو إدخال كود الجائزة.<br>Veuillez saisir le code de la récompense.",
+
 "error"
+
 );
 
 return;
@@ -611,6 +681,7 @@ message.innerHTML="";
 checkButton.disabled=true;
 
 checkButton.textContent=
+
 "جاري التحقق...";
 
 
@@ -618,25 +689,42 @@ try{
 
 
 const rewardsRef=
-collection(db,"spins");
+
+collection(
+
+db,
+
+"spins"
+
+);
 
 
 const rewardQuery=
+
 query(
 
 rewardsRef,
 
 where(
+
 "rewardCode",
+
 "==",
+
 code
+
 )
 
 );
 
 
 const snapshot=
-await getDocs(rewardQuery);
+
+await getDocs(
+
+rewardQuery
+
+);
 
 
 if(snapshot.empty){
@@ -645,8 +733,11 @@ result.style.display="block";
 
 result.className="invalid";
 
+
 status.innerHTML=
+
 "❌ هذه البطاقة غير صالحة<br>❌ Cette carte est invalide";
+
 
 prizeArabic.textContent="";
 
@@ -654,11 +745,16 @@ prizeFrench.textContent="";
 
 displayCode.textContent=code;
 
+
 confirmButton.style.display="none";
 
+
 showMessage(
+
 "هذا الكود غير موجود في النظام.<br>Ce code n'existe pas dans le système.",
+
 "error"
+
 );
 
 return;
@@ -667,47 +763,70 @@ return;
 
 
 const rewardDoc=
+
 snapshot.docs[0];
 
+
 const rewardData=
+
 rewardDoc.data();
 
-currentDocumentId=
-rewardDoc.id;
 
-currentRewardCode=
-rewardData.rewardCode;
+currentDocumentId=
+
+rewardDoc.id;
 
 
 prizeArabic.textContent=
+
 rewardData.prizeArabic ||
-getPrizeArabic(rewardData.prize);
+
+getPrizeArabic(
+
+rewardData.prize
+
+);
+
 
 prizeFrench.textContent=
-rewardData.prize;
+
+rewardData.prize || "";
 
 
 displayCode.textContent=
-rewardData.rewardCode;
+
+rewardData.rewardCode || code;
 
 
 result.style.display="block";
 
 
 if(
+
 rewardData.claimed===true
+
 ){
 
 result.className="already";
 
+
 status.innerHTML=
+
 "🎁 تم استلام هذه الجائزة من قبل<br>🎁 Cette récompense a déjà été remise";
+
 
 confirmButton.style.display="none";
 
+
+confirmedMessage.style.display="block";
+
+
 showMessage(
+
 "لا يمكن تأكيد الاستلام مرة أخرى.<br>La remise ne peut pas être confirmée une deuxième fois.",
+
 "error"
+
 );
 
 }else{
@@ -715,26 +834,49 @@ showMessage(
 
 result.className="valid";
 
+
 status.innerHTML=
-"⚠️ تم استخدام هذه البطاقة مسبقاً<br>⚠️ Cette carte a déjà été utilisée";
+
+"✅ الجائزة صالحة للاستلام<br>✅ Récompense valide pour remise";
+
 
 confirmButton.style.display="block";
 
+
+confirmedMessage.style.display="none";
+
+
 showMessage(
+
 "الجائزة صالحة للاستلام.<br>Récompense valide pour remise.",
+
 "success"
+
 );
 
 }
+
+
+result.scrollIntoView({
+
+behavior:"smooth",
+
+block:"center"
+
+});
 
 
 }catch(error){
 
 console.error(error);
 
+
 showMessage(
+
 "حدث خطأ أثناء التحقق.<br>Une erreur est survenue lors de la vérification.",
+
 "error"
+
 );
 
 }finally{
@@ -742,6 +884,7 @@ showMessage(
 checkButton.disabled=false;
 
 checkButton.textContent=
+
 "🔍 التحقق من الجائزة";
 
 }
@@ -754,6 +897,14 @@ confirmButton.onclick=async()=>{
 
 if(!currentDocumentId){
 
+showMessage(
+
+"المرجو التحقق من كود الجائزة أولا.",
+
+"error"
+
+);
+
 return;
 
 }
@@ -762,6 +913,7 @@ return;
 confirmButton.disabled=true;
 
 confirmButton.textContent=
+
 "جاري تأكيد الاستلام...";
 
 
@@ -769,10 +921,15 @@ try{
 
 
 const rewardRef=
+
 doc(
+
 db,
+
 "spins",
+
 currentDocumentId
+
 );
 
 
@@ -784,28 +941,36 @@ async transaction=>{
 
 
 const fresh=
-await transaction.get(rewardRef);
+
+await transaction.get(
+
+rewardRef
+
+);
 
 
 if(!fresh.exists()){
 
 throw new Error(
+
 "REWARD_NOT_FOUND"
+
 );
 
 }
 
 
 const data=
+
 fresh.data();
 
 
-if(
-data.claimed===true
-){
+if(data.claimed===true){
 
 throw new Error(
+
 "ALREADY_CLAIMED"
+
 );
 
 }
@@ -820,6 +985,7 @@ rewardRef,
 claimed:true,
 
 claimedAt:
+
 serverTimestamp()
 
 }
@@ -832,17 +998,25 @@ serverTimestamp()
 
 
 status.innerHTML=
+
 "✅ تم استلام الجائزة بنجاح<br>✅ Récompense remise avec succès";
+
 
 confirmButton.style.display="none";
 
+
 confirmedMessage.style.display="block";
+
 
 result.className="valid";
 
+
 showMessage(
+
 "تم تسجيل استلام الجائزة بنجاح.<br>Récompense enregistrée avec succès.",
+
 "success"
+
 );
 
 
@@ -852,31 +1026,47 @@ console.error(error);
 
 
 if(
+
 error.message==="ALREADY_CLAIMED"
+
 ){
 
 status.innerHTML=
+
 "🎁 تم استلام هذه الجائزة من قبل<br>🎁 Cette récompense a déjà été remise";
+
 
 confirmButton.style.display="none";
 
+
+confirmedMessage.style.display="block";
+
+
 result.className="already";
 
+
 showMessage(
+
 "هذه الجائزة تم استلامها من قبل.<br>Cette récompense a déjà été remise.",
+
 "error"
+
 );
 
 }else{
 
 showMessage(
+
 "وقع خطأ أثناء تأكيد الاستلام.<br>Une erreur est survenue lors de la confirmation.",
+
 "error"
+
 );
 
 confirmButton.disabled=false;
 
 confirmButton.textContent=
+
 "✅ تأكيد استلام الجائزة";
 
 }
@@ -887,11 +1077,16 @@ confirmButton.textContent=
 
 
 rewardCodeInput.addEventListener(
+
 "keydown",
+
 event=>{
 
+
 if(
+
 event.key==="Enter"
+
 ){
 
 checkButton.click();
