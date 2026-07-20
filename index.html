@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="ar" dir="rtl">
+
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -7,6 +8,7 @@
 <title>Pause & Plate — Chance Card</title>
 
 <style>
+
 :root{
 --green:#094B2D;
 --gold:#D9A51E;
@@ -14,7 +16,9 @@
 --ink:#18251b;
 }
 
-*{box-sizing:border-box}
+*{
+box-sizing:border-box;
+}
 
 body{
 margin:0;
@@ -45,7 +49,9 @@ font-weight:700;
 direction:ltr;
 }
 
-.brand span{color:var(--gold)}
+.brand span{
+color:var(--gold);
+}
 
 h1{
 text-align:center;
@@ -113,13 +119,24 @@ margin-top:22px;
 text-align:center;
 padding:22px;
 border-radius:18px;
-background:var(--green);
 color:white;
 }
 
 .result h2{
-margin:0 0 8px;
+margin:0 0 12px;
 color:#fff;
+}
+
+.result.used{
+background:#8a6110;
+}
+
+.result.invalid{
+background:#9b2020;
+}
+
+.result.success{
+background:var(--green);
 }
 
 .code{
@@ -132,6 +149,17 @@ font-weight:800;
 letter-spacing:3px;
 margin:10px 0;
 direction:ltr;
+}
+
+.prize-box{
+background:#fff;
+color:var(--green);
+border-radius:16px;
+padding:18px;
+margin:16px 0;
+font-size:21px;
+font-weight:bold;
+line-height:1.8;
 }
 
 .review{
@@ -152,12 +180,21 @@ color:#69736a;
 margin-top:14px;
 line-height:1.7;
 }
+
+.message{
+text-align:center;
+font-weight:bold;
+margin-top:15px;
+line-height:1.8;
+}
+
 </style>
 </head>
 
 <body>
 
 <div class="wrap">
+
 <div class="card">
 
 <div class="brand">
@@ -169,13 +206,17 @@ PAUSE <span>&amp;</span> PLATE
 </h1>
 
 <div class="sub">
+
 دُر العجلة واكتشف جائزتك!<br>
+
 <span dir="ltr">
 Tournez la roue et découvrez votre récompense !
 </span>
+
 </div>
 
 <div class="wheelbox">
+
 <div class="pointer"></div>
 
 <canvas
@@ -183,35 +224,62 @@ id="wheel"
 width="700"
 height="700">
 </canvas>
+
 </div>
 
 <button id="spin">
 🎡 دُر العجلة | SPIN THE WHEEL
 </button>
 
-<div id="result" class="result">
+<div
+id="result"
+class="result">
 
-<h2>
-🎉 مبروك! | FÉLICITATIONS !
-</h2>
+<h2 id="resultTitle"></h2>
+
+<div
+id="resultMessage"
+style="line-height:1.8">
+</div>
+
+<div
+id="prizeBox"
+class="prize-box"
+style="display:none">
+
+<div>
+🎁 الجائزة | Récompense
+</div>
 
 <div id="prize"></div>
 
-<div class="code" id="code"></div>
+</div>
 
-<div>
+<div
+class="code"
+id="code"
+style="display:none">
+</div>
+
+<div
+id="codeInstruction"
+style="display:none">
+
 قدم هذا الكود لفريقنا للاستفادة من جائزتك.<br>
 
 <span dir="ltr">
 Présentez ce code à notre équipe pour utiliser votre récompense.
 </span>
+
 </div>
 
 <a
+id="review"
 class="review"
 href="https://g.page/r/CZV_cSYvHWLMECA/review"
 target="_blank"
-rel="noopener">
+rel="noopener"
+style="display:none">
 
 ⭐ شارك رأيك معنا | Laisser un avis sur Google
 
@@ -234,7 +302,9 @@ Un seul spin par carte • Une seule utilisation
 </div>
 
 </div>
+
 </div>
+
 
 <script type="module">
 
@@ -280,9 +350,11 @@ appId:
 };
 
 
-const app=initializeApp(firebaseConfig);
+const app=
+initializeApp(firebaseConfig);
 
-const db=getFirestore(app);
+const db=
+getFirestore(app);
 
 
 const prizes=[
@@ -332,15 +404,18 @@ color:"#C8D0B8"
 ];
 
 
-const canvas=document.getElementById("wheel");
+const canvas=
+document.getElementById("wheel");
 
-const ctx=canvas.getContext("2d");
+const ctx=
+canvas.getContext("2d");
 
 const cx=350;
 const cy=350;
 const r=320;
 
-const visualArc=2*Math.PI/prizes.length;
+const visualArc=
+2*Math.PI/prizes.length;
 
 let angle=0;
 let spinning=false;
@@ -350,11 +425,13 @@ function draw(){
 
 ctx.clearRect(0,0,700,700);
 
-let start=angle-Math.PI/2;
+let start=
+angle-Math.PI/2;
 
 prizes.forEach(p=>{
 
-const arc=visualArc;
+const arc=
+visualArc;
 
 ctx.beginPath();
 
@@ -370,11 +447,16 @@ start+arc
 
 ctx.closePath();
 
-ctx.fillStyle=p.color;
+ctx.fillStyle=
+p.color;
+
 ctx.fill();
 
-ctx.strokeStyle="#fff";
+ctx.strokeStyle=
+"#fff";
+
 ctx.lineWidth=5;
+
 ctx.stroke();
 
 ctx.save();
@@ -390,13 +472,16 @@ ctx.fillStyle="#17351f";
 ctx.font="bold 19px Arial";
 
 ctx.fillText(
+
 p.name.length>22
 ?
 "-10% prochaine visite"
 :
 p.name,
+
 285,
 -12
+
 );
 
 ctx.font="bold 18px Arial";
@@ -424,11 +509,13 @@ cy,
 2*Math.PI
 );
 
-ctx.fillStyle="#094B2D";
+ctx.fillStyle=
+"#094B2D";
 
 ctx.fill();
 
-ctx.strokeStyle="#D9A51E";
+ctx.strokeStyle=
+"#D9A51E";
 
 ctx.lineWidth=7;
 
@@ -440,24 +527,36 @@ ctx.textAlign="center";
 
 ctx.font="bold 24px Georgia";
 
-ctx.fillText("PAUSE",cx,cy-5);
+ctx.fillText(
+"PAUSE",
+cx,
+cy-5
+);
 
-ctx.fillText("& PLATE",cx,cy+25);
+ctx.fillText(
+"& PLATE",
+cx,
+cy+25
+);
 
 }
 
 
 function weightedPick(){
 
-let x=Math.random()*100;
+let x=
+Math.random()*100;
 
 let s=0;
 
-for(const p of prizes){
+for(
+const p of prizes
+){
 
 s+=p.pct;
 
-if(x<=s)return p;
+if(x<=s)
+return p;
 
 }
 
@@ -473,11 +572,17 @@ const chars=
 
 let code="PP-";
 
-for(let i=0;i<8;i++){
+for(
+let i=0;
+i<8;
+i++
+){
 
-code+=chars[
+code+=
+chars[
 Math.floor(
-Math.random()*chars.length
+Math.random()*
+chars.length
 )
 ];
 
@@ -488,36 +593,148 @@ return code;
 }
 
 
+function showResult(type,title,messageText,prizeData=null,codeValue=null){
+
+const result=
+document.getElementById("result");
+
+const resultTitle=
+document.getElementById("resultTitle");
+
+const resultMessage=
+document.getElementById("resultMessage");
+
+const prizeBox=
+document.getElementById("prizeBox");
+
+const prize=
+document.getElementById("prize");
+
+const code=
+document.getElementById("code");
+
+const instruction=
+document.getElementById("codeInstruction");
+
+const review=
+document.getElementById("review");
+
+
+result.className=
+"result "+
+type;
+
+result.style.display=
+"block";
+
+resultTitle.innerHTML=
+title;
+
+resultMessage.innerHTML=
+messageText;
+
+
+prizeBox.style.display=
+"none";
+
+code.style.display=
+"none";
+
+instruction.style.display=
+"none";
+
+review.style.display=
+"none";
+
+
+if(prizeData){
+
+prizeBox.style.display=
+"block";
+
+prize.innerHTML=
+
+"<strong>"+
+
+(prizeData.ar || "")+
+
+"<br><span dir='ltr'>"+
+
+(prizeData.name || "")+
+
+"</span></strong>";
+
+}
+
+
+if(codeValue){
+
+code.style.display=
+"inline-block";
+
+code.textContent=
+codeValue;
+
+instruction.style.display=
+"block";
+
+review.style.display=
+"inline-block";
+
+}
+
+}
+
+
 draw();
 
 
-document.getElementById("spin").onclick=async()=>{
+document
+.getElementById("spin")
+.onclick=
+async()=>{
 
-if(spinning)return;
+
+if(spinning)
+return;
+
 
 const cardId=
 new URLSearchParams(
 window.location.search
-).get("card");
+)
+.get("card");
 
 
 if(!cardId){
 
-alert(
-"❌ هذه البطاقة غير صالحة\n❌ Cette carte est invalide"
+showResult(
+
+"invalid",
+
+"❌ بطاقة غير صالحة",
+
+"❌ هذه البطاقة غير صالحة<br>"+
+"<span dir='ltr'>Cette carte n'est pas valide</span>"
+
 );
 
 return;
 
 }
 
+
 spinning=true;
 
-const spinButton=document.getElementById("spin");
+
+const spinButton=
+document.getElementById("spin");
 
 spinButton.disabled=true;
 
+
 try{
+
 
 const cardRef=
 doc(
@@ -528,13 +745,22 @@ db,
 cardId
 );
 
-const cardSnap=await getDoc(cardRef);
+
+const cardSnap=
+await getDoc(cardRef);
 
 
 if(!cardSnap.exists()){
 
-alert(
-"❌ هذه البطاقة غير صالحة\n❌ Cette carte est invalide"
+showResult(
+
+"invalid",
+
+"❌ بطاقة غير صالحة",
+
+"❌ هذه البطاقة غير صالحة<br>"+
+"<span dir='ltr'>Cette carte n'est pas valide</span>"
+
 );
 
 spinning=false;
@@ -546,15 +772,35 @@ return;
 }
 
 
-const currentData=cardSnap.data();
+const currentData=
+cardSnap.data();
 
 
-if(
-currentData.status!=="unused"
-){
+if(currentData.status!=="unused"){
 
-alert(
-"⚠️ تم استخدام هذه البطاقة مسبقاً\n⚠️ Cette carte a déjà été utilisée"
+const existingPrize={
+
+name:
+currentData.prize || "",
+
+ar:
+currentData.prizeArabic || currentData.prize || ""
+
+};
+
+
+showResult(
+
+"used",
+
+"⚠️ تم استخدام هذه البطاقة مسبقاً",
+
+"⚠️ Cette carte a déjà été utilisée",
+
+existingPrize,
+
+currentData.rewardCode || null
+
 );
 
 spinning=false;
@@ -566,36 +812,50 @@ return;
 }
 
 
-const winner=weightedPick();
+const winner=
+weightedPick();
 
-const idx=prizes.indexOf(winner);
+const idx=
+prizes.indexOf(winner);
 
-const target=(idx+0.5)*visualArc;
+const target=
+(idx+0.5)*
+visualArc;
+
 
 const finalRotation=
 
 angle+
 
 Math.PI*2*
-(5+Math.floor(Math.random()*3))
-+
+(5+
+Math.floor(
+Math.random()*3
+))+
+
 (Math.PI*2-target);
 
-const start=angle;
+
+const start=
+angle;
 
 const duration=4500;
 
-const t0=performance.now();
+const t0=
+performance.now();
 
 
 function anim(t){
 
-const k=Math.min(
+const k=
+Math.min(
 1,
-(t-t0)/duration
+(t-t0)/
+duration
 );
 
-const ease=1-Math.pow(
+const ease=
+1-Math.pow(
 1-k,
 4
 );
@@ -632,8 +892,15 @@ requestAnimationFrame(anim);
 
 console.error(error);
 
-alert(
-"حدث خطأ أثناء الاتصال بالنظام.\nUne erreur est survenue."
+showResult(
+
+"invalid",
+
+"⚠️ خطأ في التحقق",
+
+"وقع خطأ أثناء التحقق من البطاقة.<br>"+
+"<span dir='ltr'>Une erreur est survenue lors de la vérification.</span>"
+
 );
 
 spinning=false;
@@ -646,14 +913,18 @@ spinButton.disabled=false;
 
 
 async function finishSpin(
+
 cardRef,
 cardId,
 winner
+
 ){
 
-try{
+const rewardCode=
+makeCode();
 
-const rewardCode=makeCode();
+
+try{
 
 
 await runTransaction(
@@ -662,16 +933,35 @@ db,
 
 async transaction=>{
 
+
 const fresh=
-await transaction.get(cardRef);
+await transaction.get(
+cardRef
+);
 
 
 if(
-!fresh.exists() ||
-fresh.data().status!=="unused"
+!fresh.exists()
 ){
 
-throw new Error("USED");
+throw new Error(
+"INVALID_CARD"
+);
+
+}
+
+
+const freshData=
+fresh.data();
+
+
+if(
+freshData.status!=="unused"
+){
+
+throw new Error(
+"ALREADY_USED"
+);
 
 }
 
@@ -682,15 +972,20 @@ cardRef,
 
 {
 
-status:"prize_won",
+status:
+"prize_won",
 
-prize:winner.name,
+prize:
+winner.name,
 
-prizeArabic:winner.ar,
+prizeArabic:
+winner.ar,
 
-rewardCode:rewardCode,
+rewardCode:
+rewardCode,
 
-wonAt:serverTimestamp()
+wonAt:
+serverTimestamp()
 
 }
 
@@ -707,44 +1002,45 @@ collection(db,"spins"),
 
 {
 
-cardId:cardId,
+cardId:
+cardId,
 
-prize:winner.name,
+prize:
+winner.name,
 
-prizeArabic:winner.ar,
+prizeArabic:
+winner.ar,
 
-rewardCode:rewardCode,
+rewardCode:
+rewardCode,
 
-status:"prize_won",
+status:
+"prize_won",
 
 claimed:false,
 
-createdAt:serverTimestamp()
+createdAt:
+serverTimestamp()
 
 }
 
 );
 
 
-document.getElementById("prize").innerHTML=
+showResult(
 
-"<strong>"+
+"success",
 
-winner.ar+
+"🎉 مبروك! | FÉLICITATIONS !",
 
-"<br><span dir='ltr'>"+
+"تم تخصيص جائزتك بنجاح.<br>"+
+"<span dir='ltr'>Votre récompense a été attribuée avec succès.</span>",
 
-winner.name+
+winner,
 
-"</span></strong>";
+rewardCode
 
-
-document.getElementById("code").textContent=
-rewardCode;
-
-
-document.getElementById("result").style.display=
-"block";
+);
 
 
 spinning=false;
@@ -754,23 +1050,59 @@ spinning=false;
 
 console.error(error);
 
-if(error.message==="USED"){
 
-alert(
-"⚠️ تم استخدام هذه البطاقة مسبقاً\n⚠️ Cette carte a déjà été utilisée"
+if(
+error.message==="ALREADY_USED"
+){
+
+const fresh=
+await getDoc(cardRef);
+
+const data=
+fresh.data();
+
+showResult(
+
+"used",
+
+"⚠️ تم استخدام هذه البطاقة مسبقاً",
+
+"⚠️ Cette carte a déjà été utilisée",
+
+{
+
+name:
+data.prize || "",
+
+ar:
+data.prizeArabic || data.prize || ""
+
+},
+
+data.rewardCode || null
+
 );
 
 }else{
 
-alert(
-"حدث خطأ أثناء حفظ الجائزة.\nUne erreur est survenue lors de l'enregistrement."
+showResult(
+
+"invalid",
+
+"⚠️ تعذر إتمام العملية",
+
+"تعذر إتمام العملية.<br>"+
+"<span dir='ltr'>Impossible de terminer l'opération.</span>"
+
 );
 
 }
 
 spinning=false;
 
-document.getElementById("spin").disabled=false;
+document
+.getElementById("spin")
+.disabled=false;
 
 }
 
@@ -779,4 +1111,5 @@ document.getElementById("spin").disabled=false;
 </script>
 
 </body>
+
 </html>
