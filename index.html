@@ -162,15 +162,257 @@ font-weight:bold;
 line-height:1.8;
 }
 
-.review{
-display:inline-block;
-margin-top:14px;
-background:var(--gold);
-color:#17351f;
-text-decoration:none;
-padding:12px 18px;
+.review-card{
+
+margin-top:24px;
+
+background:
+linear-gradient(
+145deg,
+#fffdf8 0%,
+#f8f1df 100%
+);
+
+border:1px solid #e6d9b7;
+
+border-radius:22px;
+
+padding:22px 18px;
+
+color:var(--green);
+
+box-shadow:
+0 8px 22px #00000016;
+
+position:relative;
+
+overflow:hidden;
+
+animation:
+reviewAppear .6s ease both;
+
+}
+
+.review-card::before{
+
+content:"";
+
+position:absolute;
+
+top:-45px;
+
+left:-45px;
+
+width:120px;
+
+height:120px;
+
+border-radius:50%;
+
+background:#D9A51E18;
+
+}
+
+.review-card::after{
+
+content:"";
+
+position:absolute;
+
+bottom:-55px;
+
+right:-45px;
+
+width:150px;
+
+height:150px;
+
+border-radius:50%;
+
+background:#094B2D0D;
+
+}
+
+.google-badge{
+
+position:relative;
+
+z-index:1;
+
+display:inline-flex;
+
+align-items:center;
+
+gap:8px;
+
+background:#fff;
+
+padding:7px 14px;
+
 border-radius:999px;
-font-weight:700;
+
+font-size:13px;
+
+font-weight:bold;
+
+color:#4b554d;
+
+box-shadow:0 3px 10px #00000012;
+
+margin-bottom:14px;
+
+direction:ltr;
+
+}
+
+.google-icon{
+
+font-size:19px;
+
+font-weight:900;
+
+}
+
+.review-title{
+
+position:relative;
+
+z-index:1;
+
+font-size:20px;
+
+font-weight:800;
+
+line-height:1.7;
+
+margin-bottom:7px;
+
+}
+
+.review-subtitle{
+
+position:relative;
+
+z-index:1;
+
+font-family:Georgia,serif;
+
+font-size:17px;
+
+font-style:italic;
+
+line-height:1.6;
+
+color:#536157;
+
+direction:ltr;
+
+}
+
+.review-text{
+
+position:relative;
+
+z-index:1;
+
+margin-top:14px;
+
+font-size:14px;
+
+line-height:1.7;
+
+color:#667065;
+
+}
+
+.review{
+
+position:relative;
+
+z-index:2;
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+gap:8px;
+
+width:100%;
+
+margin-top:18px;
+
+background:var(--gold);
+
+color:#17351f;
+
+text-decoration:none;
+
+padding:14px 18px;
+
+border-radius:999px;
+
+font-weight:800;
+
+font-size:16px;
+
+box-shadow:
+
+0 5px 0 #ae8214,
+
+0 8px 18px #0000001c;
+
+transition:
+
+transform .18s ease,
+
+box-shadow .18s ease;
+
+}
+
+.review:hover{
+
+transform:translateY(-2px);
+
+box-shadow:
+
+0 7px 0 #ae8214,
+
+0 11px 22px #00000025;
+
+}
+
+.review:active{
+
+transform:translateY(3px);
+
+box-shadow:
+
+0 2px 0 #ae8214,
+
+0 4px 10px #00000018;
+
+}
+
+@keyframes reviewAppear{
+
+from{
+
+opacity:0;
+
+transform:translateY(14px) scale(.98);
+
+}
+
+to{
+
+opacity:1;
+
+transform:translateY(0) scale(1);
+
+}
+
 }
 
 .note{
@@ -273,17 +515,51 @@ Présentez ce code à notre équipe pour utiliser votre récompense.
 
 </div>
 
+<div
+id="reviewCard"
+class="review-card"
+style="display:none">
+
+<div class="google-badge">
+
+<span class="google-icon">G</span>
+
+<span>Google Reviews</span>
+
+</div>
+
+<div class="review-title">
+
+كل تجربة عندها قصة…<br>
+ورأيك هو العنوان ديالها ✨
+
+</div>
+
+<div class="review-subtitle">
+
+Chaque expérience a son histoire…<br>
+votre avis en est le titre ✨
+
+</div>
+
+<div class="review-text">
+
+شارك رأيك معنا وخلي تجربتك تكون جزءاً من قصتنا 💚
+
+</div>
+
 <a
 id="review"
 class="review"
 href="https://g.page/r/CZV_cSYvHWLMECA/review"
 target="_blank"
-rel="noopener"
-style="display:none">
+rel="noopener">
 
-⭐ شارك رأيك معنا | Laisser un avis sur Google
+⭐ شارك رأيك معنا على Google Reviews
 
 </a>
+
+</div>
 
 </div>
 
@@ -616,8 +892,8 @@ document.getElementById("code");
 const instruction=
 document.getElementById("codeInstruction");
 
-const review=
-document.getElementById("review");
+const reviewCard=
+document.getElementById("reviewCard");
 
 
 result.className=
@@ -643,7 +919,7 @@ code.style.display=
 instruction.style.display=
 "none";
 
-review.style.display=
+reviewCard.style.display=
 "none";
 
 
@@ -678,8 +954,8 @@ codeValue;
 instruction.style.display=
 "block";
 
-review.style.display=
-"inline-block";
+reviewCard.style.display=
+"block";
 
 }
 
