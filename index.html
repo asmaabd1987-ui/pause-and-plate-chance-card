@@ -7,7 +7,6 @@
 <title>Pause & Plate — Chance Card</title>
 
 <style>
-
 :root{
 --green:#094B2D;
 --gold:#D9A51E;
@@ -15,9 +14,7 @@
 --ink:#18251b;
 }
 
-*{
-box-sizing:border-box;
-}
+*{box-sizing:border-box}
 
 body{
 margin:0;
@@ -48,9 +45,7 @@ font-weight:700;
 direction:ltr;
 }
 
-.brand span{
-color:var(--gold);
-}
+.brand span{color:var(--gold)}
 
 h1{
 text-align:center;
@@ -157,14 +152,12 @@ color:#69736a;
 margin-top:14px;
 line-height:1.7;
 }
-
 </style>
 </head>
 
 <body>
 
 <div class="wrap">
-
 <div class="card">
 
 <div class="brand">
@@ -176,17 +169,13 @@ PAUSE <span>&amp;</span> PLATE
 </h1>
 
 <div class="sub">
-
 دُر العجلة واكتشف جائزتك!<br>
-
 <span dir="ltr">
 Tournez la roue et découvrez votre récompense !
 </span>
-
 </div>
 
 <div class="wheelbox">
-
 <div class="pointer"></div>
 
 <canvas
@@ -194,16 +183,13 @@ id="wheel"
 width="700"
 height="700">
 </canvas>
-
 </div>
 
 <button id="spin">
 🎡 دُر العجلة | SPIN THE WHEEL
 </button>
 
-<div
-id="result"
-class="result">
+<div id="result" class="result">
 
 <h2>
 🎉 مبروك! | FÉLICITATIONS !
@@ -211,19 +197,14 @@ class="result">
 
 <div id="prize"></div>
 
-<div
-class="code"
-id="code">
-</div>
+<div class="code" id="code"></div>
 
 <div>
-
 قدم هذا الكود لفريقنا للاستفادة من جائزتك.<br>
 
 <span dir="ltr">
 Présentez ce code à notre équipe pour utiliser votre récompense.
 </span>
-
 </div>
 
 <a
@@ -253,25 +234,17 @@ Un seul spin par carte • Une seule utilisation
 </div>
 
 </div>
-
 </div>
-
 
 <script type="module">
 
 import {
-
 initializeApp
-
 }
-
 from
-
 "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
-
 import {
-
 getFirestore,
 doc,
 getDoc,
@@ -279,11 +252,8 @@ runTransaction,
 collection,
 addDoc,
 serverTimestamp
-
 }
-
 from
-
 "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 
@@ -310,12 +280,9 @@ appId:
 };
 
 
-const app=
-initializeApp(firebaseConfig);
+const app=initializeApp(firebaseConfig);
 
-
-const db=
-getFirestore(app);
+const db=getFirestore(app);
 
 
 const prizes=[
@@ -365,58 +332,33 @@ color:"#C8D0B8"
 ];
 
 
-const canvas=
-document.getElementById("wheel");
+const canvas=document.getElementById("wheel");
 
-
-const ctx=
-canvas.getContext("2d");
-
+const ctx=canvas.getContext("2d");
 
 const cx=350;
-
 const cy=350;
-
 const r=320;
 
-
-const visualArc=
-2*Math.PI/prizes.length;
-
+const visualArc=2*Math.PI/prizes.length;
 
 let angle=0;
-
 let spinning=false;
 
 
 function draw(){
 
-ctx.clearRect(
-0,
-0,
-700,
-700
-);
+ctx.clearRect(0,0,700,700);
 
-
-let start=
-angle-Math.PI/2;
-
+let start=angle-Math.PI/2;
 
 prizes.forEach(p=>{
 
-const arc=
-visualArc;
-
+const arc=visualArc;
 
 ctx.beginPath();
 
-
-ctx.moveTo(
-cx,
-cy
-);
-
+ctx.moveTo(cx,cy);
 
 ctx.arc(
 cx,
@@ -426,84 +368,46 @@ start,
 start+arc
 );
 
-
 ctx.closePath();
 
-
-ctx.fillStyle=
-p.color;
-
-
+ctx.fillStyle=p.color;
 ctx.fill();
 
-
-ctx.strokeStyle=
-"#fff";
-
-
-ctx.lineWidth=
-5;
-
-
+ctx.strokeStyle="#fff";
+ctx.lineWidth=5;
 ctx.stroke();
-
 
 ctx.save();
 
+ctx.translate(cx,cy);
 
-ctx.translate(
-cx,
-cy
-);
+ctx.rotate(start+arc/2);
 
+ctx.textAlign="right";
 
-ctx.rotate(
-start+arc/2
-);
+ctx.fillStyle="#17351f";
 
-
-ctx.textAlign=
-"right";
-
-
-ctx.fillStyle=
-"#17351f";
-
-
-ctx.font=
-"bold 19px Arial";
-
+ctx.font="bold 19px Arial";
 
 ctx.fillText(
-
 p.name.length>22
 ?
 "-10% prochaine visite"
 :
 p.name,
-
 285,
 -12
-
 );
 
-
-ctx.font=
-"bold 18px Arial";
-
+ctx.font="bold 18px Arial";
 
 ctx.fillText(
-
 p.ar,
-
 285,
 18
-
 );
 
-
 ctx.restore();
-
 
 start+=arc;
 
@@ -511,7 +415,6 @@ start+=arc;
 
 
 ctx.beginPath();
-
 
 ctx.arc(
 cx,
@@ -521,74 +424,42 @@ cy,
 2*Math.PI
 );
 
-
-ctx.fillStyle=
-"#094B2D";
-
+ctx.fillStyle="#094B2D";
 
 ctx.fill();
 
+ctx.strokeStyle="#D9A51E";
 
-ctx.strokeStyle=
-"#D9A51E";
-
-
-ctx.lineWidth=
-7;
-
+ctx.lineWidth=7;
 
 ctx.stroke();
 
+ctx.fillStyle="#fff";
 
-ctx.fillStyle=
-"#fff";
+ctx.textAlign="center";
 
+ctx.font="bold 24px Georgia";
 
-ctx.textAlign=
-"center";
+ctx.fillText("PAUSE",cx,cy-5);
 
-
-ctx.font=
-"bold 24px Georgia";
-
-
-ctx.fillText(
-"PAUSE",
-cx,
-cy-5
-);
-
-
-ctx.fillText(
-"& PLATE",
-cx,
-cy+25
-);
+ctx.fillText("& PLATE",cx,cy+25);
 
 }
 
 
 function weightedPick(){
 
-let x=
-Math.random()*100;
-
+let x=Math.random()*100;
 
 let s=0;
 
-
-for(
-const p of prizes
-){
+for(const p of prizes){
 
 s+=p.pct;
 
-
-if(x<=s)
-return p;
+if(x<=s)return p;
 
 }
-
 
 return prizes[0];
 
@@ -600,27 +471,17 @@ function makeCode(){
 const chars=
 "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
 
+let code="PP-";
 
-let code=
-"PP-";
+for(let i=0;i<8;i++){
 
-
-for(
-let i=0;
-i<8;
-i++
-){
-
-code+=
-chars[
+code+=chars[
 Math.floor(
-Math.random()*
-chars.length
+Math.random()*chars.length
 )
 ];
 
 }
-
 
 return code;
 
@@ -630,207 +491,242 @@ return code;
 draw();
 
 
-document
-.getElementById("spin")
-.onclick=
-async()=>{
+document.getElementById("spin").onclick=async()=>{
 
-
-if(spinning)
-return;
-
+if(spinning)return;
 
 const cardId=
 new URLSearchParams(
 window.location.search
-)
-.get("card");
+).get("card");
 
 
 if(!cardId){
 
 alert(
-"المرجو استعمال رابط بطاقة صالح."
+"❌ هذه البطاقة غير صالحة\n❌ Cette carte est invalide"
 );
 
 return;
 
 }
 
-
 spinning=true;
 
+const spinButton=document.getElementById("spin");
 
-const spinButton=
-document.getElementById("spin");
-
-
-spinButton.disabled=
-true;
-
+spinButton.disabled=true;
 
 try{
 
-
 const cardRef=
 doc(
-
 db,
-
 "authorizedUsers",
-
 "Admin",
-
 "Cards",
-
 cardId
-
 );
 
-
-const cardSnap=
-await getDoc(cardRef);
+const cardSnap=await getDoc(cardRef);
 
 
-if(
-!cardSnap.exists()
-){
+if(!cardSnap.exists()){
 
 alert(
-"هذه البطاقة غير موجودة."
+"❌ هذه البطاقة غير صالحة\n❌ Cette carte est invalide"
 );
 
 spinning=false;
 
-spinButton.disabled=
-false;
+spinButton.disabled=false;
 
 return;
 
 }
 
 
-const currentData=
-cardSnap.data();
+const currentData=cardSnap.data();
 
 
 if(
 currentData.status!=="unused"
 ){
 
-if(
-currentData.status==="prize_won"
-||
-currentData.status==="redeemed"
-){
-
 alert(
-"هذه البطاقة دارت Spin من قبل."
+"⚠️ تم استخدام هذه البطاقة مسبقاً\n⚠️ Cette carte a déjà été utilisée"
 );
-
-}else{
-
-alert(
-"هذه البطاقة غير متاحة."
-);
-
-}
 
 spinning=false;
 
-spinButton.disabled=
-false;
+spinButton.disabled=false;
 
 return;
 
 }
 
 
-const winner=
-weightedPick();
+const winner=weightedPick();
 
+const idx=prizes.indexOf(winner);
 
-const idx=
-prizes.indexOf(
-winner
-);
-
-
-const target=
-(idx+0.5)*
-visualArc;
-
+const target=(idx+0.5)*visualArc;
 
 const finalRotation=
 
 angle+
 
 Math.PI*2*
-
-(5+
-Math.floor(
-Math.random()*3
-))+
-
+(5+Math.floor(Math.random()*3))
++
 (Math.PI*2-target);
 
+const start=angle;
 
-const start=
-angle;
+const duration=4500;
 
-
-const duration=
-4500;
-
-
-const t0=
-performance.now();
+const t0=performance.now();
 
 
 function anim(t){
 
-const k=
-Math.min(
+const k=Math.min(
 1,
-(t-t0)/
-duration
+(t-t0)/duration
 );
 
-
-const ease=
-1-Math.pow(
+const ease=1-Math.pow(
 1-k,
 4
 );
-
 
 angle=
 start+
 (finalRotation-start)*
 ease;
 
-
 draw();
 
 
-if(
-k<1
-){
+if(k<1){
 
-requestAnimationFrame(
-anim
-);
+requestAnimationFrame(anim);
 
 }else{
 
+finishSpin(
+cardRef,
+cardId,
+winner
+);
 
-const rewardCode=
-makeCode();
+}
+
+}
 
 
-document
-.getElementById("prize")
-.innerHTML=
+requestAnimationFrame(anim);
+
+
+}catch(error){
+
+console.error(error);
+
+alert(
+"حدث خطأ أثناء الاتصال بالنظام.\nUne erreur est survenue."
+);
+
+spinning=false;
+
+spinButton.disabled=false;
+
+}
+
+};
+
+
+async function finishSpin(
+cardRef,
+cardId,
+winner
+){
+
+try{
+
+const rewardCode=makeCode();
+
+
+await runTransaction(
+
+db,
+
+async transaction=>{
+
+const fresh=
+await transaction.get(cardRef);
+
+
+if(
+!fresh.exists() ||
+fresh.data().status!=="unused"
+){
+
+throw new Error("USED");
+
+}
+
+
+transaction.update(
+
+cardRef,
+
+{
+
+status:"prize_won",
+
+prize:winner.name,
+
+prizeArabic:winner.ar,
+
+rewardCode:rewardCode,
+
+wonAt:serverTimestamp()
+
+}
+
+);
+
+}
+
+);
+
+
+await addDoc(
+
+collection(db,"spins"),
+
+{
+
+cardId:cardId,
+
+prize:winner.name,
+
+prizeArabic:winner.ar,
+
+rewardCode:rewardCode,
+
+status:"prize_won",
+
+claimed:false,
+
+createdAt:serverTimestamp()
+
+}
+
+);
+
+
+document.getElementById("prize").innerHTML=
 
 "<strong>"+
 
@@ -843,140 +739,44 @@ winner.name+
 "</span></strong>";
 
 
-document
-.getElementById("code")
-.textContent=
+document.getElementById("code").textContent=
 rewardCode;
 
 
-document
-.getElementById("result")
-.style.display=
+document.getElementById("result").style.display=
 "block";
-
-
-runTransaction(
-
-db,
-
-async transaction=>{
-
-
-const fresh=
-await transaction.get(
-cardRef
-);
-
-
-if(
-
-!fresh.exists()
-||
-fresh.data().status!=="unused"
-
-){
-
-throw new Error(
-"USED"
-);
-
-}
-
-
-transaction.update(
-
-cardRef,
-
-{
-
-status:
-"prize_won",
-
-prize:
-winner.name,
-
-prizeArabic:
-winner.ar,
-
-rewardCode:
-rewardCode,
-
-wonAt:
-serverTimestamp()
-
-}
-
-);
-
-});
-
-
-addDoc(
-
-collection(
-db,
-"spins"
-),
-
-{
-
-cardId:
-cardId,
-
-prize:
-winner.name,
-
-prizeArabic:
-winner.ar,
-
-rewardCode:
-rewardCode,
-
-status:
-"prize_won",
-
-createdAt:
-serverTimestamp()
-
-}
-
-);
-
-}
-
-}
-
-
-requestAnimationFrame(
-anim
-);
-
-
-}catch(error){
-
-console.error(
-error
-);
-
-
-alert(
-"Firebase Error: "+
-error.message
-);
 
 
 spinning=false;
 
 
-spinButton.disabled=
-false;
+}catch(error){
+
+console.error(error);
+
+if(error.message==="USED"){
+
+alert(
+"⚠️ تم استخدام هذه البطاقة مسبقاً\n⚠️ Cette carte a déjà été utilisée"
+);
+
+}else{
+
+alert(
+"حدث خطأ أثناء حفظ الجائزة.\nUne erreur est survenue lors de l'enregistrement."
+);
 
 }
 
-};
+spinning=false;
+
+document.getElementById("spin").disabled=false;
+
+}
+
+}
 
 </script>
 
 </body>
-
 </html>
