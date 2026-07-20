@@ -400,34 +400,6 @@ box-shadow:
 
 }
 
-.review-again{
-
-position:relative;
-
-z-index:2;
-
-display:block;
-
-width:100%;
-
-margin-top:12px;
-
-background:var(--green);
-
-color:#fff;
-
-border:0;
-
-padding:13px 18px;
-
-border-radius:999px;
-
-font-weight:800;
-
-font-size:15px;
-
-}
-
 @keyframes reviewAppear{
 
 from{
@@ -601,11 +573,15 @@ transform:scale(1) translateY(0);
 <div class="card">
 
 <div class="brand">
+
 PAUSE <span>&amp;</span> PLATE
+
 </div>
 
 <h1>
+
 🎁 بطاقة الحظ | CHANCE CARD
+
 </h1>
 
 <div class="sub">
@@ -613,7 +589,9 @@ PAUSE <span>&amp;</span> PLATE
 أدر العجلة واكتشف جائزتك!<br>
 
 <span dir="ltr">
+
 Tournez la roue et découvrez votre récompense !
+
 </span>
 
 </div>
@@ -653,7 +631,9 @@ class="prize-box"
 style="display:none">
 
 <div>
+
 🎁 الجائزة | Récompense
+
 </div>
 
 <div id="prize"></div>
@@ -726,14 +706,6 @@ rel="noopener">
 
 </a>
 
-<button
-id="openReviewAgain"
-class="review-again">
-
-⭐ فتح Google Reviews مرة أخرى
-
-</button>
-
 </div>
 
 </div>
@@ -759,7 +731,7 @@ Un seul spin par carte • Une seule utilisation
 </div>
 
 
-<!-- REVIEW MODAL -->
+<!-- GOOGLE REVIEW POPUP -->
 
 <div
 id="reviewModal"
@@ -967,17 +939,26 @@ ctx.font = "bold 19px Arial";
 
 
 let frenchText =
+
 p.name.length > 22
+
 ?
+
 "-10% prochaine visite"
+
 :
+
 p.name;
 
 
 ctx.fillText(
+
 frenchText,
+
 285,
+
 -12
+
 );
 
 
@@ -985,9 +966,13 @@ ctx.font = "bold 18px Arial";
 
 
 ctx.fillText(
+
 p.ar,
+
 285,
+
 18
+
 );
 
 
@@ -1004,11 +989,17 @@ start += arc;
 ctx.beginPath();
 
 ctx.arc(
+
 cx,
+
 cy,
+
 92,
+
 0,
+
 2 * Math.PI
+
 );
 
 ctx.fillStyle = "#094B2D";
@@ -1028,15 +1019,23 @@ ctx.textAlign = "center";
 ctx.font = "bold 24px Georgia";
 
 ctx.fillText(
+
 "PAUSE",
+
 cx,
+
 cy - 5
+
 );
 
 ctx.fillText(
+
 "& PLATE",
+
 cx,
+
 cy + 25
+
 );
 
 }
@@ -1054,6 +1053,7 @@ draw();
 function weightedPick(){
 
 let x =
+
 Math.random() * 100;
 
 let s = 0;
@@ -1063,6 +1063,7 @@ for(const p of prizes){
 
 s += p.pct;
 
+
 if(x <= s){
 
 return p;
@@ -1070,6 +1071,7 @@ return p;
 }
 
 }
+
 
 return prizes[0];
 
@@ -1083,6 +1085,7 @@ return prizes[0];
 function makeCode(){
 
 const chars =
+
 "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
 
 let code = "PP-";
@@ -1091,12 +1094,17 @@ let code = "PP-";
 for(let i = 0; i < 8; i++){
 
 code += chars[
+
 Math.floor(
+
 Math.random() * chars.length
+
 )
+
 ];
 
 }
+
 
 return code;
 
@@ -1124,60 +1132,77 @@ openReviewPopup = false
 ){
 
 const result =
+
 document.getElementById("result");
 
 const resultTitle =
+
 document.getElementById("resultTitle");
 
 const resultMessage =
+
 document.getElementById("resultMessage");
 
 const prizeBox =
+
 document.getElementById("prizeBox");
 
 const prize =
+
 document.getElementById("prize");
 
 const code =
+
 document.getElementById("code");
 
 const instruction =
+
 document.getElementById("codeInstruction");
 
 const reviewCard =
+
 document.getElementById("reviewCard");
 
 
 result.className =
+
 "result " + type;
 
 result.style.display =
+
 "block";
 
 
 resultTitle.innerHTML =
+
 title;
 
 resultMessage.innerHTML =
+
 messageText;
 
 
 prizeBox.style.display =
+
 "none";
 
 code.style.display =
+
 "none";
 
 instruction.style.display =
+
 "none";
 
 reviewCard.style.display =
+
 "none";
 
 
 if(prizeData){
 
 prizeBox.style.display =
+
 "block";
 
 
@@ -1199,15 +1224,19 @@ prize.innerHTML =
 if(codeValue){
 
 code.style.display =
+
 "inline-block";
 
 code.textContent =
+
 codeValue;
 
 instruction.style.display =
+
 "block";
 
 reviewCard.style.display =
+
 "block";
 
 }
@@ -1231,8 +1260,11 @@ if(openReviewPopup){
 setTimeout(() => {
 
 document
+
 .getElementById("reviewModal")
+
 .classList
+
 .add("show");
 
 },700);
@@ -1246,37 +1278,6 @@ document
    LOCAL STORAGE
 ========================= */
 
-function getStoredCard(){
-
-if(!currentCardId){
-
-return null;
-
-}
-
-
-try{
-
-return JSON.parse(
-
-localStorage.getItem(
-
-"pause_plate_card_" +
-currentCardId
-
-)
-
-);
-
-}catch{
-
-return null;
-
-}
-
-}
-
-
 function saveStoredCard(data){
 
 if(!currentCardId){
@@ -1289,6 +1290,7 @@ return;
 localStorage.setItem(
 
 "pause_plate_card_" +
+
 currentCardId,
 
 JSON.stringify(data)
@@ -1299,42 +1301,40 @@ JSON.stringify(data)
 
 
 /* =========================
-   REVIEW POPUP
+   REVIEW MODAL
 ========================= */
 
 document
-.getElementById("openReviewAgain")
-.addEventListener("click", () => {
 
-document
-.getElementById("reviewModal")
-.classList
-.add("show");
-
-});
-
-
-document
 .getElementById("closeModal")
+
 .addEventListener("click", () => {
 
 document
+
 .getElementById("reviewModal")
+
 .classList
+
 .remove("show");
 
 });
 
 
 document
+
 .getElementById("reviewModal")
+
 .addEventListener("click", event => {
 
 if(event.target.id === "reviewModal"){
 
 document
+
 .getElementById("reviewModal")
+
 .classList
+
 .remove("show");
 
 }
@@ -1349,45 +1349,68 @@ document
 async function loadFirebase(){
 
 const firebaseApp =
+
 await import(
+
 "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"
+
 );
 
+
 const firebaseFirestore =
+
 await import(
+
 "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js"
+
 );
 
 
 const firebaseConfig = {
 
 apiKey:
+
 "AIzaSyCHON3xqMq-Ob-ul1WWB1lY8Qw2UAdUvX8",
 
 authDomain:
+
 "pause-and-plate-chance-card.firebaseapp.com",
 
 projectId:
+
 "pause-and-plate-chance-card",
 
 storageBucket:
+
 "pause-and-plate-chance-card.firebasestorage.app",
 
 messagingSenderId:
+
 "593151678023",
 
 appId:
+
 "1:593151678023:web:71336ac1cb40a51800c362"
 
 };
 
 
 const app =
-firebaseApp.initializeApp(firebaseConfig);
+
+firebaseApp.initializeApp(
+
+firebaseConfig
+
+);
 
 
 const db =
-firebaseFirestore.getFirestore(app);
+
+firebaseFirestore.getFirestore(
+
+app
+
+);
 
 
 return {
@@ -1395,21 +1418,27 @@ return {
 db,
 
 doc:
+
 firebaseFirestore.doc,
 
 getDoc:
+
 firebaseFirestore.getDoc,
 
 runTransaction:
+
 firebaseFirestore.runTransaction,
 
 collection:
+
 firebaseFirestore.collection,
 
 addDoc:
+
 firebaseFirestore.addDoc,
 
 serverTimestamp:
+
 firebaseFirestore.serverTimestamp
 
 };
@@ -1422,7 +1451,9 @@ firebaseFirestore.serverTimestamp
 ========================= */
 
 document
+
 .getElementById("spin")
+
 .addEventListener("click", async () => {
 
 
@@ -1434,14 +1465,18 @@ return;
 
 
 const spinButton =
+
 document.getElementById("spin");
 
 
 currentCardId =
 
 new URLSearchParams(
+
 window.location.search
+
 )
+
 .get("card");
 
 
@@ -1476,9 +1511,8 @@ spinButton.disabled = true;
 try{
 
 
-/* تحميل Firebase فقط الآن */
-
 const firebase =
+
 await loadFirebase();
 
 
@@ -1501,7 +1535,11 @@ currentCardId
 
 const cardSnap =
 
-await firebase.getDoc(cardRef);
+await firebase.getDoc(
+
+cardRef
+
+);
 
 
 if(!cardSnap.exists()){
@@ -1532,22 +1570,28 @@ return;
 
 
 const currentData =
+
 cardSnap.data();
 
 
-/* إذا كانت البطاقة مستعملة */
+/* البطاقة مستعملة من قبل */
 
 if(
+
 currentData.status !== "unused"
+
 ){
 
 const existingPrize = {
 
 name:
+
 currentData.prize || "",
 
 ar:
+
 currentData.prizeArabic ||
+
 currentData.prize || ""
 
 };
@@ -1556,12 +1600,15 @@ currentData.prize || ""
 saveStoredCard({
 
 prize:
+
 existingPrize.name,
 
 prizeArabic:
+
 existingPrize.ar,
 
 rewardCode:
+
 currentData.rewardCode || ""
 
 });
@@ -1602,14 +1649,17 @@ return;
 /* اختيار الجائزة */
 
 const winner =
+
 weightedPick();
 
 
 const idx =
+
 prizes.indexOf(winner);
 
 
 const target =
+
 (idx + 0.5) * visualArc;
 
 
@@ -1621,18 +1671,21 @@ Math.PI * 2 *
 
 (5 + Math.floor(Math.random() * 3)) +
 
-( Math.PI * 2 - target );
+(Math.PI * 2 - target);
 
 
 const start =
+
 angle;
 
 
 const duration =
+
 4500;
 
 
 const t0 =
+
 performance.now();
 
 
@@ -1651,7 +1704,13 @@ Math.min(
 
 const ease =
 
-1 - Math.pow(1 - k, 4);
+1 - Math.pow(
+
+1 - k,
+
+4
+
+);
 
 
 angle =
@@ -1668,7 +1727,11 @@ draw();
 
 if(k < 1){
 
-requestAnimationFrame(animate);
+requestAnimationFrame(
+
+animate
+
+);
 
 }else{
 
@@ -1689,12 +1752,22 @@ winner
 }
 
 
-requestAnimationFrame(animate);
+requestAnimationFrame(
+
+animate
+
+);
 
 
 }catch(error){
 
-console.error("ERROR:", error);
+console.error(
+
+"ERROR:",
+
+error
+
+);
 
 
 showResult(
@@ -1740,6 +1813,7 @@ winner
 ){
 
 const rewardCode =
+
 makeCode();
 
 
@@ -1754,28 +1828,40 @@ async transaction => {
 
 
 const fresh =
-await transaction.get(cardRef);
+
+await transaction.get(
+
+cardRef
+
+);
 
 
 if(!fresh.exists()){
 
 throw new Error(
+
 "INVALID_CARD"
+
 );
 
 }
 
 
 const freshData =
+
 fresh.data();
 
 
 if(
+
 freshData.status !== "unused"
+
 ){
 
 throw new Error(
+
 "ALREADY_USED"
+
 );
 
 }
@@ -1788,18 +1874,23 @@ cardRef,
 {
 
 status:
+
 "prize_won",
 
 prize:
+
 winner.name,
 
 prizeArabic:
+
 winner.ar,
 
 rewardCode:
+
 rewardCode,
 
 wonAt:
+
 firebase.serverTimestamp()
 
 }
@@ -1811,13 +1902,16 @@ firebase.serverTimestamp()
 );
 
 
-/* تسجيل spin */
+/* تسجيل العملية */
 
 await firebase.addDoc(
 
 firebase.collection(
+
 firebase.db,
+
 "spins"
+
 ),
 
 {
@@ -1860,18 +1954,21 @@ firebase.serverTimestamp()
 saveStoredCard({
 
 prize:
+
 winner.name,
 
 prizeArabic:
+
 winner.ar,
 
 rewardCode:
+
 rewardCode
 
 });
 
 
-/* عرض الجائزة + Popup */
+/* عرض الجائزة وفتح Popup */
 
 showResult(
 
@@ -1883,7 +1980,9 @@ showResult(
 
 "<span dir='ltr'>" +
 
-"Votre récompense a été attribuée avec succès." +
+"Votre récompense a été attribuée avec succès."
+
++
 
 "</span>",
 
@@ -1901,28 +2000,45 @@ spinning = false;
 
 }catch(error){
 
-console.error(error);
+console.error(
+
+error
+
+);
 
 
 if(
-error.message === "ALREADY_USED"
+
+error.message ===
+
+"ALREADY_USED"
+
 ){
 
 const fresh =
-await firebase.getDoc(cardRef);
+
+await firebase.getDoc(
+
+cardRef
+
+);
 
 
 const data =
+
 fresh.data();
 
 
 const existingPrize = {
 
 name:
+
 data.prize || "",
 
 ar:
+
 data.prizeArabic ||
+
 data.prize || ""
 
 };
@@ -1931,12 +2047,15 @@ data.prize || ""
 saveStoredCard({
 
 prize:
+
 existingPrize.name,
 
 prizeArabic:
+
 existingPrize.ar,
 
 rewardCode:
+
 data.rewardCode || ""
 
 });
@@ -1948,11 +2067,13 @@ showResult(
 
 "⚠️ تم استخدام هذه البطاقة من قبل",
 
-"⚠️ هذه البطاقة استُخدمت مسبقاً.<br>" +
+"⚠️ هذه البطاقة استُعملت مسبقاً.<br>" +
 
 "<span dir='ltr'>" +
 
-"Cette carte a déjà été utilisée." +
+"Cette carte a déjà été utilisée."
+
++
 
 "</span>",
 
@@ -1976,7 +2097,9 @@ showResult(
 
 "<span dir='ltr'>" +
 
-"Impossible de terminer l'opération pour le moment." +
+"Impossible de terminer l'opération pour le moment."
+
++
 
 "</span>"
 
@@ -1988,7 +2111,9 @@ showResult(
 spinning = false;
 
 document
+
 .getElementById("spin")
+
 .disabled = false;
 
 }
