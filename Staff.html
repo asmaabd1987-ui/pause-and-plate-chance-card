@@ -1,0 +1,539 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Pause & Plate — Staff</title>
+
+<style>
+
+:root{
+--green:#094B2D;
+--gold:#D9A51E;
+--cream:#F7F1E5;
+--ink:#18251b;
+}
+
+*{
+box-sizing:border-box;
+}
+
+body{
+margin:0;
+background:var(--cream);
+color:var(--ink);
+font-family:Arial,"Noto Sans Arabic",sans-serif;
+}
+
+.wrap{
+max-width:620px;
+margin:auto;
+padding:22px;
+}
+
+.card{
+background:#fffdf8;
+border-radius:28px;
+padding:28px;
+box-shadow:0 14px 40px #00000018;
+}
+
+.brand{
+text-align:center;
+color:var(--green);
+font-family:Georgia,serif;
+font-size:30px;
+font-weight:700;
+direction:ltr;
+}
+
+.brand span{
+color:var(--gold);
+}
+
+h1{
+text-align:center;
+color:var(--green);
+margin:18px 0 8px;
+}
+
+.sub{
+text-align:center;
+color:#667065;
+line-height:1.8;
+margin-bottom:25px;
+}
+
+label{
+display:block;
+font-weight:bold;
+margin-bottom:8px;
+}
+
+input{
+width:100%;
+padding:17px;
+border:1px solid #ddd;
+border-radius:14px;
+font-size:20px;
+text-align:center;
+letter-spacing:2px;
+direction:ltr;
+text-transform:uppercase;
+}
+
+button{
+width:100%;
+margin-top:18px;
+padding:16px;
+border:0;
+border-radius:999px;
+background:var(--green);
+color:white;
+font-size:18px;
+font-weight:bold;
+cursor:pointer;
+}
+
+button:disabled{
+opacity:.55;
+}
+
+.result{
+display:none;
+margin-top:25px;
+padding:25px;
+border-radius:20px;
+text-align:center;
+background:var(--green);
+color:white;
+}
+
+.result h2{
+margin-top:0;
+color:white;
+}
+
+.prize{
+font-size:24px;
+font-weight:bold;
+margin:18px 0;
+line-height:1.7;
+}
+
+.code{
+display:inline-block;
+background:white;
+color:var(--green);
+padding:13px 22px;
+border-radius:12px;
+font-size:22px;
+font-weight:bold;
+letter-spacing:3px;
+direction:ltr;
+}
+
+.status{
+margin-top:20px;
+padding:14px;
+border-radius:12px;
+font-weight:bold;
+}
+
+.valid{
+background:#dff2df;
+color:#176b2c;
+}
+
+.used{
+background:#ffe1e1;
+color:#a00000;
+}
+
+.error{
+margin-top:20px;
+padding:15px;
+border-radius:12px;
+background:#ffe1e1;
+color:#a00000;
+text-align:center;
+font-weight:bold;
+}
+
+.note{
+margin-top:22px;
+text-align:center;
+font-size:13px;
+color:#69736a;
+line-height:1.8;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="wrap">
+
+<div class="card">
+
+<div class="brand">
+PAUSE <span>&amp;</span> PLATE
+</div>
+
+<h1>🎫 التحقق من الجائزة</h1>
+
+<div class="sub">
+
+أدخل رمز البطاقة للتحقق من الجائزة التي فاز بها الزبون.<br>
+
+<span dir="ltr">
+Entrez le code de la carte pour vérifier la récompense.
+</span>
+
+</div>
+
+<label>
+🔐 رمز البطاقة | Code de la carte
+</label>
+
+<input
+id="cardCode"
+type="text"
+placeholder="PP-000001"
+autocomplete="off"
+>
+
+<button id="check">
+🔍 التحقق من البطاقة | Vérifier
+</button>
+
+<div
+id="error"
+class="error"
+style="display:none">
+</div>
+
+<div
+id="result"
+class="result">
+
+<h2>
+🎉 الجائزة المؤكدة
+</h2>
+
+<div
+id="prize"
+class="prize">
+</div>
+
+<div>
+رمز الجائزة:
+</div>
+
+<div
+id="rewardCode"
+class="code">
+</div>
+
+<div
+id="status"
+class="status">
+</div>
+
+</div>
+
+<div class="note">
+
+هذه الصفحة تعرض نفس الجائزة التي تم تحديدها عند دوران العجلة.<br>
+
+<span dir="ltr">
+Cette page affiche exactement la récompense obtenue lors du spin.
+</span>
+
+</div>
+
+</div>
+
+</div>
+
+
+<script type="module">
+
+import {
+
+initializeApp
+
+}
+
+from
+
+"https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+
+import {
+
+getFirestore,
+
+doc,
+
+getDoc
+
+}
+
+from
+
+"https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+
+const firebaseConfig={
+
+apiKey:
+"AIzaSyCHON3xqMq-Ob-ul1WWB1lY8Qw2UAdUvX8",
+
+authDomain:
+"pause-and-plate-chance-card.firebaseapp.com",
+
+projectId:
+"pause-and-plate-chance-card",
+
+storageBucket:
+"pause-and-plate-chance-card.firebasestorage.app",
+
+messagingSenderId:
+"593151678023",
+
+appId:
+"1:593151678023:web:71336ac1cb40a51800c362"
+
+};
+
+
+const app=
+initializeApp(firebaseConfig);
+
+
+const db=
+getFirestore(app);
+
+
+const cardCode=
+document.getElementById("cardCode");
+
+
+const check=
+document.getElementById("check");
+
+
+const result=
+document.getElementById("result");
+
+
+const error=
+document.getElementById("error");
+
+
+const prize=
+document.getElementById("prize");
+
+
+const rewardCode=
+document.getElementById("rewardCode");
+
+
+const status=
+document.getElementById("status");
+
+
+function showError(message){
+
+error.textContent=message;
+
+error.style.display="block";
+
+result.style.display="none";
+
+}
+
+
+function hideError(){
+
+error.style.display="none";
+
+}
+
+
+check.onclick=async()=>{
+
+const id=
+cardCode.value
+.trim()
+.toUpperCase();
+
+
+if(!id){
+
+showError(
+"المرجو إدخال رمز البطاقة."
+);
+
+return;
+
+}
+
+
+if(!/^PP-\d{6}$/.test(id)){
+
+showError(
+"رمز البطاقة غير صحيح. مثال: PP-000001"
+);
+
+return;
+
+}
+
+
+check.disabled=true;
+
+check.textContent=
+"جاري التحقق...";
+
+
+hideError();
+
+
+try{
+
+
+const cardRef=
+doc(
+
+db,
+
+"authorizedUsers",
+
+"Admin",
+
+"Cards",
+
+id
+
+);
+
+
+const snapshot=
+await getDoc(cardRef);
+
+
+if(!snapshot.exists()){
+
+showError(
+"❌ هذه البطاقة غير موجودة في النظام."
+);
+
+return;
+
+}
+
+
+const data=
+snapshot.data();
+
+
+if(
+
+!data.prize ||
+
+!data.rewardCode
+
+){
+
+showError(
+
+"⚠️ هذه البطاقة لم يتم تدويرها بعد، ولا توجد جائزة مسجلة لها."
+
+);
+
+return;
+
+}
+
+
+prize.innerHTML=
+
+"<strong>"+
+
+data.prize+
+
+"</strong>";
+
+
+rewardCode.textContent=
+data.rewardCode;
+
+
+if(data.status==="used"){
+
+status.className=
+"status used";
+
+status.textContent=
+"⚠️ هذه البطاقة مستعملة من قبل.";
+
+}else{
+
+status.className=
+"status valid";
+
+status.textContent=
+"✅ البطاقة صحيحة والجائزة مؤكدة.";
+
+}
+
+
+result.style.display=
+"block";
+
+
+}catch(e){
+
+console.error(e);
+
+showError(
+"Firebase Error: "+
+e.message
+);
+
+}
+
+
+check.disabled=false;
+
+check.textContent=
+"🔍 التحقق من البطاقة | Vérifier";
+
+};
+
+
+cardCode.addEventListener(
+
+"keydown",
+
+e=>{
+
+if(e.key==="Enter"){
+
+check.click();
+
+}
+
+}
+
+);
+
+</script>
+
+</body>
+
+</html>
